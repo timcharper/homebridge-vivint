@@ -1,5 +1,8 @@
-var assert = require('assert');
-var devices = require("../lib/devices.js")
+const assert = require('assert');
+const DeviceSetModule = require("../lib/device_set.js")
+
+const MockHomebridge = {hap: {}}
+const DeviceSet = DeviceSetModule({}, console.log, MockHomebridge, {})
 
 const mockDoorSensor = {
   "ch": 1,
@@ -80,7 +83,7 @@ const mockWindowSensor = {
 describe('DeviceSet', function() {
   describe('#constructor', function() {
     it('populates the devices with the given delegators', function() {
-      var deviceSet = new devices.DeviceSet({}, [mockWindowSensor, mockDoorSensor])
+      var deviceSet = new DeviceSet([mockWindowSensor, mockDoorSensor])
       assert.equal(2, deviceSet.devices.length)
       assert.equal("DoorWindowSensor", deviceSet.devices[0].getType())
       assert.equal("DoorWindowSensor", deviceSet.devices[1].getType())
