@@ -27,8 +27,6 @@ module.exports = function (homebridge) {
       Promise.all([pubNubPromise, deviceSetPromise]).then((resolved) => {
         let pubNub = resolved[0]
         let deviceSet = resolved[1]
-        console.log(pubNub)
-        console.log("===============")
         pubNub.addListener({
           status: function(statusEvent) {
             console.log("status", statusEvent)
@@ -42,7 +40,6 @@ module.exports = function (homebridge) {
             console.log("presence", presenceEvent)
           }
         })
-        console.log("!===============")
       })
 
       this.accessories = (next) => {
