@@ -2,6 +2,7 @@ var Accessory, Service, Characteristic, UUIDGen;
 
 const VivintApiModule = require("./lib/vivint_api.js")
 const DeviceSetModule = require("./lib/device_set.js")
+const ThermostatCharacteristicsModule = require("./lib/thermostat_characteristics.js")
 
 module.exports = function (homebridge) {
   Accessory = homebridge.platformAccessory;
@@ -9,6 +10,7 @@ module.exports = function (homebridge) {
   Characteristic = homebridge.hap.Characteristic;
   UUIDGen = homebridge.hap.uuid;
 
+  let ThermostatCharacteristics = ThermostatCharacteristicsModule(homebridge)
   class VivintPlatform {
     constructor(log, config, api) {
       this.log = log
@@ -18,7 +20,7 @@ module.exports = function (homebridge) {
       let VivintApi = VivintApiModule(config, log)
       let vivintApiPromise = VivintApi.login({username: config.username, password: config.password})
       let deviceSetPromise = vivintApiPromise.then((vivintApi) => {
-        let DeviceSet = DeviceSetModule(config, log, homebridge, vivintApi)
+        let DeviceSet = DeviceSetModule(config, log, homebridge, vivintApi, ThermostatCharacteristics)
         return new DeviceSet(vivintApi.systemInfo.system.par[0].d);
       })
 
