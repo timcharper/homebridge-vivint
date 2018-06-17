@@ -1,6 +1,6 @@
 {
   "name": "homebridge-vivint",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Control Vivint with HomeBridge",
   "license": "ISC",
   "author": "Tim Harper <timcharper@gmail.com>",
@@ -19,6 +19,7 @@
     "homebridge": ">=0.2.0"
   },
   "dependencies": {
+    "debounce-promise": "^3.1.0",
     "isobject": "^3.0.1",
     "pubnub": "^4.21.2",
     "request": "^2.87.0",
