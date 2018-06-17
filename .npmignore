@@ -2,3 +2,4 @@ node_modules
 accessories/
 persist/
 *.tgz
+scratch
