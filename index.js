@@ -22,10 +22,39 @@ module.exports = function (homebridge) {
         return new DeviceSet(vivintApi.systemInfo.system.par[0].d);
       })
 
+      let pubNubPromise = vivintApiPromise.then((vivintApi) => vivintApi.connectPubNub())
+
+      Promise.all([pubNubPromise, deviceSetPromise]).then((resolved) => {
+        let pubNub = resolved[0]
+        let deviceSet = resolved[1]
+        console.log(pubNub)
+        console.log("===============")
+        pubNub.addListener({
+          status: function(statusEvent) {
+            console.log("status", statusEvent)
+          },
+          message: function(msg) {
+            log("received pubNub msg")
+            log(msg)
+            deviceSet.handleMessage(msg)
+          },
+          presence: function(presenceEvent) {
+            console.log("presence", presenceEvent)
+          }
+        })
+        console.log("!===============")
+      })
+
       this.accessories = (next) => {
         deviceSetPromise.then(
-          (deviceSet) => next(undefined, deviceSet.devices),
-          (error) => next(error)
+          (deviceSet) => {
+            console.log("deviceSet", deviceSet)
+            next(deviceSet.devices)
+          },
+          (error) => {
+            log("error initializing vivint api: " + error)
+            next([])
+          }
         )
       }
     }
