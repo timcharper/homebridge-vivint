@@ -57,7 +57,7 @@ const MockHomebridge = {
 
 const DeviceSet = DeviceSetModule({}, console.log, MockHomebridge, {})
 
-const mockDoorSensor = {
+let mockDoorSensor = () => ({
   "_id": 28,
   "vd": ["Back Door"],
   "n": "Back Door",
@@ -70,9 +70,9 @@ const mockDoorSensor = {
   "er": 1, "lb": false, "icz": false, "ln": 2, "tr": false, "ts": "2018-06-16T05:03:49.230000", "plctx": {"ts":
   "2018-06-16T05:03:49.230000"}, "from_sync": 1, "re": true, "zid": 3, "sup": false, "panid": 13, "ta": false, "suv":
   true, "dd": false, "b": 0, "ccz": false, "v": true,
-}
+})
 
-const mockWindowSensor = {
+let mockWindowSensor = () => ({
   "_id": 42,
   "vd": ["Basement", "Shop", "Window"],
   "ch": 1,
@@ -85,9 +85,9 @@ const mockWindowSensor = {
   "er": 1, "lb": false, "icz": false, "ln": 2, "tr": false, "ts": "2018-06-10T03:04:46.059000", "plctx": {"ts":
   "2018-06-10T03:04:46.059000"}, "from_sync": 1, "re": true, "zid": 17, "sup": false, "panid": 13, "ta": false, "suv":
   true, "dd": false, "b": 0, "ccz": true, "v": true,
-}
+})
 
-const mockDoorLock = {
+let mockDoorLock = () => ({
   "_id": 24,
   "n": "Front Door",
   "s": true,
@@ -121,12 +121,15 @@ const mockDoorLock = {
   "caca": [{"ca": [22], "t": 5}, {"ca": [30], "t": 7}, {"ca": [31], "t": 8}],
   "pnlctx": {"operation_type": 1, "ts": "2018-06-16T05:07:38.527000"},
   "op": 1
-}
+})
 
 describe('DeviceSet', function() {
+  snapshotTs_earlier = "2018-06-16T06:58:00.999999"
+  snapshotTs = "2018-06-16T06:59:00.000000"
+  snapshotTs_later = "2018-06-16T06:59:00.000000"
   describe('#constructor', function() {
     it('populates the devices with the given delegators', function() {
-      var deviceSet = new DeviceSet([mockWindowSensor, mockDoorSensor, mockDoorLock])
+      var deviceSet = new DeviceSet([mockWindowSensor(), mockDoorSensor(), mockDoorLock()], snapshotTs)
       assert.equal(3, deviceSet.devices.length)
       assert.equal("DoorWindowSensor", deviceSet.devicesById[28].getType())
       assert.equal("DoorWindowSensor", deviceSet.devicesById[42].getType())
@@ -134,11 +137,24 @@ describe('DeviceSet', function() {
     });
   });
 
+  describe('#handleSnapshot', function() {
+    it("receives a new snapshot of data and publishes to homebridge", function() {
+      var deviceSet = new DeviceSet([mockWindowSensor()], snapshotTs)
+      var basementShopWindow = deviceSet.devicesById[42]
+
+      let mockWindowSensorNewSnapshot = mockWindowSensor()
+      mockWindowSensorNewSnapshot.s = true
+      let Characteristic = MockHomebridge.hap.Characteristic
+
+      assert.equal(basementShopWindow.contactSensorValue(), Characteristic.ContactSensorState.CONTACT_DETECTED);
+      deviceSet.handleSnapshot([mockWindowSensorNewSnapshot], snapshotTs_later)
+      assert.equal(basementShopWindow.contactSensorValue(), Characteristic.ContactSensorState.CONTACT_NOT_DETECTED);
+    })
+  });
   describe('#handleMessage', function() {
     it("updates the data and publishes an update to homebridge", function() {
-      var deviceSet = new DeviceSet([mockWindowSensor, mockDoorSensor])
+      var deviceSet = new DeviceSet([mockWindowSensor(), mockDoorSensor()], snapshotTs)
       var basementShopWindow = deviceSet.devicesById[42]
-      let services = deviceSet.devices.map((device) => device.getServices()).reduce((a,b) => a.concat(b))
       let Characteristic = MockHomebridge.hap.Characteristic
 
       assert.equal(basementShopWindow.contactSensorValue(), Characteristic.ContactSensorState.CONTACT_DETECTED);
@@ -151,6 +167,26 @@ describe('DeviceSet', function() {
           parid:1,
           t:"account_partition"}})
       assert.equal(basementShopWindow.contactSensorValue(), Characteristic.ContactSensorState.CONTACT_NOT_DETECTED);
+    })
+
+    it("ignores messages originating before the current snapshot", function() {
+      var deviceSet = new DeviceSet([mockWindowSensor(), mockDoorSensor()], snapshotTs)
+      console.log(deviceSet)
+      var basementShopWindow = deviceSet.devicesById[42]
+      let Characteristic = MockHomebridge.hap.Characteristic
+
+      assert.equal(basementShopWindow.contactSensorValue(), Characteristic.ContactSensorState.CONTACT_DETECTED);
+      deviceSet.handleMessage(
+        {
+          message: {
+            _id:"13|1",
+            da:{d:[{_id:42,s:true}],plctx:{ts:snapshotTs_earlier}},
+            op:"u",
+            panid:13,
+            parid:1,
+            t:"account_partition"}},
+        "2018-06-16T06:58:00.999999")
+      assert.equal(basementShopWindow.contactSensorValue(), Characteristic.ContactSensorState.CONTACT_DETECTED);
     })
   });
 });
