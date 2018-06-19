@@ -11,6 +11,7 @@ module.exports = function (homebridge) {
   UUIDGen = homebridge.hap.uuid;
 
   let ThermostatCharacteristics = ThermostatCharacteristicsModule(homebridge)
+
   class VivintPlatform {
     constructor(log, config, api) {
       this.log = log
@@ -19,9 +20,23 @@ module.exports = function (homebridge) {
 
       let VivintApi = VivintApiModule(config, log)
       let vivintApiPromise = VivintApi.login({username: config.username, password: config.password})
+      let apiLoginRefreshSecs = config.apiLoginRefreshSecs || 1200 // once per 20 minutes default
+
+
       let deviceSetPromise = vivintApiPromise.then((vivintApi) => {
         let DeviceSet = DeviceSetModule(config, log, homebridge, vivintApi, ThermostatCharacteristics)
-        return new DeviceSet(vivintApi.systemInfo.system.par[0].d);
+        let deviceData = vivintApi.deviceSnapshot()
+        let deviceSet = new DeviceSet(deviceData, vivintApi.deviceSnapshotTs())
+        setInterval(() => {
+
+          vivintApi.renew()
+            .then((_) => vivintApi.renewSystemInfo())
+            .then((systemInfo) => {
+              deviceSet.handleSnapshot(vivintApi.deviceSnapshot(), vivintApi.deviceSnapshotTs())})
+            .catch((err) => log("error refreshing", err))
+        }, apiLoginRefreshSecs * 1000)
+
+        return deviceSet;
       })
 
       let pubNubPromise = vivintApiPromise.then((vivintApi) => vivintApi.connectPubNub())
@@ -35,7 +50,7 @@ module.exports = function (homebridge) {
           },
           message: function(msg) {
             log("received pubNub msg")
-            log(msg)
+            log(msg.message)
             deviceSet.handleMessage(msg)
           },
           presence: function(presenceEvent) {
@@ -46,10 +61,7 @@ module.exports = function (homebridge) {
 
       this.accessories = (next) => {
         deviceSetPromise.then(
-          (deviceSet) => {
-            console.log("deviceSet", deviceSet)
-            next(deviceSet.devices)
-          },
+          (deviceSet) => next(deviceSet.devices),
           (error) => {
             log("error initializing vivint api: " + error)
             next([])
