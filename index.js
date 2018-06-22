@@ -50,7 +50,7 @@ module.exports = function (homebridge) {
           },
           message: function(msg) {
             log("received pubNub msg")
-            log(msg.message)
+            log(JSON.stringify(msg.message))
             deviceSet.handleMessage(msg)
           },
           presence: function(presenceEvent) {
