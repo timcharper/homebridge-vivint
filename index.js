@@ -24,7 +24,7 @@ module.exports = function (homebridge) {
 
 
       let deviceSetPromise = vivintApiPromise.then((vivintApi) => {
-        let DeviceSet = DeviceSetModule(config, log, homebridge, vivintApi, ThermostatCharacteristics)
+        let DeviceSet = DeviceSetModule(config, log, homebridge, vivintApi, ThermostatCharacteristics, setInterval, Date)
         let deviceData = vivintApi.deviceSnapshot()
         let deviceSet = new DeviceSet(deviceData, vivintApi.deviceSnapshotTs())
         setInterval(() => {

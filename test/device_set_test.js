@@ -1,36 +1,14 @@
 const assert = require('assert');
 const DeviceSetModule = require("../lib/device_set.js")
 
-class AccessoryInformation {
-  constructor() {
-    this.properties = {}
-  }
-  setCharacteristic(characteristic, value) {
-    this.properties[characteristic] = value
-    return this;
-  }
-}
-class Characteristic {
-  constructor(name) {
-    this._on = {}
-  }
-
-  on(key, fn) {
-    this._on[key] = fn
-    return this;
-  }
-  updateValue(value) {
-    this.value = value
-  }
-}
-class ContactSensor {
+class MockDevice {
   constructor(name) {
     this.name = name
-    this.characteristics = {
-      ContactSensorState: new Characteristic()
-    }
+    this.characteristics = {}
   }
   getCharacteristic(characteristic) {
+    if (!(characteristic.name in this.characteristics))
+      this.characteristics[characteristic.name] = new Characteristic(characteristic)
     return this.characteristics[characteristic.name]
   }
   setCharacteristic(characteristic, value) {
@@ -38,24 +16,54 @@ class ContactSensor {
     return this
   }
 }
+
+class Characteristic {
+  constructor(char) {
+    this.name = char.name
+    this.characteristic = char
+    this._on = {}
+  }
+
+  on(key, fn) {
+    this._on[key] = fn
+    return this;
+  }
+
+  triggerGetSync() {
+    var result
+    this._on['get']((err, r) => result =r )
+    return result
+  }
+
+  updateValue(value) {
+    this.value = value
+  }
+}
+
+class AccessoryInformation extends MockDevice {}
+class MotionSensor extends MockDevice {}
+class OccupancySensor extends MockDevice {}
+class ContactSensor extends MockDevice {}
 const MockHomebridge = {
   hap: {
     uuid: { generate: (input) => input },
     Service: {
       AccessoryInformation: AccessoryInformation,
-      ContactSensor: ContactSensor
+      ContactSensor: ContactSensor,
+      MotionSensor: MotionSensor,
+      OccupancySensor: OccupancySensor
     },
     Characteristic: {
       Manufacturer: {name: "Manufacturer"},
       Model: {name: "Model"},
       SerialNumber: {name: "SerialNumber"},
       ContactSensorState: {name: "ContactSensorState", CONTACT_DETECTED: "CONTACT_DETECTED", CONTACT_NOT_DETECTED: "CONTACT_NOT_DETECTED"},
-      LockTargetState: {name: "LockTargetState", SECURED: "SECURED", UNSECURED: "UNSECURED"}
+      LockTargetState: {name: "LockTargetState", SECURED: "SECURED", UNSECURED: "UNSECURED"},
+      MotionDetected: {name: "MotionDetected", SECURED: "SECURED", UNSECURED: "UNSECURED"},
+      OccupancyDetected: {name: "OccupancyDetected", OCCUPANCY_DETECTED: 'OCCUPANCY_DETECTED', OCCUPANCY_NOT_DETECTED: 'OCCUPANCY_NOT_DETECTED' }
     }
   }
 }
-
-const DeviceSet = DeviceSetModule({}, console.log, MockHomebridge, {})
 
 let mockDoorSensor = () => ({
   "_id": 28,
@@ -70,6 +78,21 @@ let mockDoorSensor = () => ({
   "er": 1, "lb": false, "icz": false, "ln": 2, "tr": false, "ts": "2018-06-16T05:03:49.230000", "plctx": {"ts":
   "2018-06-16T05:03:49.230000"}, "from_sync": 1, "re": true, "zid": 3, "sup": false, "panid": 13, "ta": false, "suv":
   true, "dd": false, "b": 0, "ccz": false, "v": true,
+})
+
+let mockMotionSensor = () => ({
+  "_id": 45,
+  "vd": ["Family", "Room", "Motion", "Sensor"],
+  "ch": 1,
+  "ser": 192977,
+  "ser32": 16970193,
+  "n": "Family Room Motion Sensor",
+  "t": "wireless_sensor",
+  "s": false,
+  "cc": true, "cb": true, "ea": true, "ec": 1249, "eqt": 1, "set": 3, "pnlctx": {"ts": "2018-06-10T03:04:46.059000"},
+  "er": 1, "lb": false, "icz": false, "ln": 2, "tr": false, "ts": "2018-06-10T03:04:46.059000", "plctx": {"ts":
+  "2018-06-10T03:04:46.059000"}, "from_sync": 1, "re": true, "zid": 17, "sup": false, "panid": 13, "ta": false, "suv":
+  true, "dd": false, "b": 0, "ccz": true, "v": true,
 })
 
 let mockWindowSensor = () => ({
@@ -127,6 +150,26 @@ describe('DeviceSet', function() {
   snapshotTs_earlier = "2018-06-16T06:58:00.999999"
   snapshotTs = "2018-06-16T06:59:00.000000"
   snapshotTs_later = "2018-06-16T06:59:00.000000"
+  var DeviceSet
+  var MockSetInterval
+  var MockDate
+  let Characteristic = MockHomebridge.hap.Characteristic
+  let motionDetectedOccupancySensorMins = 1
+
+  beforeEach(() => {
+    let timers = []
+    MockSetInterval = function(fn, frequency) {
+      timers.push({fn, frequency})
+    }
+    MockSetInterval.getTimers = () => timers
+    MockSetInterval.clear = () => { timers = [] }
+    MockDate = {
+      currentTime: 1529629810000,
+      now: () => MockDate.currentTime
+    }
+    DeviceSet = DeviceSetModule({motionDetectedOccupancySensorMins}, console.log, MockHomebridge, {}, {}, MockSetInterval, MockDate)
+  })
+
   describe('#constructor', function() {
     it('populates the devices with the given delegators', function() {
       var deviceSet = new DeviceSet([mockWindowSensor(), mockDoorSensor(), mockDoorLock()], snapshotTs)
@@ -136,6 +179,45 @@ describe('DeviceSet', function() {
       assert.equal("Lock", deviceSet.devicesById[24].getType())
     });
   });
+
+  describe("#motionSensorOccupancy", function() {
+    it('turns on occupancy sensor for the configured duration when the motion sensor actives', () => {
+      var deviceSet = new DeviceSet([mockMotionSensor()])
+      let motionSensor = deviceSet.devicesById[45]
+      let services = motionSensor.getServices()
+      let occupancy = services[2]
+      let occupancyDetected = occupancy.getCharacteristic(Characteristic.OccupancyDetected)
+      assert.equal(1, MockSetInterval.getTimers().length)
+      let occupancyInterval = MockSetInterval.getTimers()[0]
+      assert.equal(60000, occupancyInterval.frequency)
+
+      // defaults to off
+
+      assert.equal(Characteristic.OccupancyDetected.OCCUPANCY_NOT_DETECTED, occupancyDetected.triggerGetSync())
+
+      // sense motion
+      deviceSet.handleMessage({
+        message: {
+          da:{d:[{_id:45,s:true}], plctx:{ts:"2018-06-16T06:59:09.198000"}}}})
+
+      assert.equal(Characteristic.OccupancyDetected.OCCUPANCY_DETECTED, occupancyDetected.value)
+      assert.equal(Characteristic.OccupancyDetected.OCCUPANCY_DETECTED, occupancyDetected.triggerGetSync())
+
+      // trigger at just before the duration
+      MockDate.currentTime += (motionDetectedOccupancySensorMins * 60 * 1000) - 1
+      occupancyInterval.fn()
+
+      assert.equal(Characteristic.OccupancyDetected.OCCUPANCY_DETECTED, occupancyDetected.value)
+      assert.equal(Characteristic.OccupancyDetected.OCCUPANCY_DETECTED, occupancyDetected.triggerGetSync())
+
+      // trigger at the duration
+      MockDate.currentTime += 1
+      occupancyInterval.fn()
+
+      assert.equal(Characteristic.OccupancyDetected.OCCUPANCY_NOT_DETECTED, occupancyDetected.value)
+      assert.equal(Characteristic.OccupancyDetected.OCCUPANCY_NOT_DETECTED, occupancyDetected.triggerGetSync())
+    })
+  })
 
   describe('#handleSnapshot', function() {
     it("receives a new snapshot of data and publishes to homebridge", function() {
