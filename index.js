@@ -64,7 +64,7 @@ module.exports = function (homebridge) {
           (deviceSet) => next(deviceSet.devices),
           (error) => {
             log("error initializing vivint api: " + error)
-            next([])
+            next(null)
           }
         )
       }
