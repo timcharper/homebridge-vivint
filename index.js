@@ -1,8 +1,34 @@
 var Accessory, Service, Characteristic, UUIDGen;
 
+const PluginName = "homebridge-vivint"
+const PlatformName = "Vivint"
 const VivintApiModule = require("./lib/vivint_api.js")
 const DeviceSetModule = require("./lib/device_set.js")
 const ThermostatCharacteristicsModule = require("./lib/thermostat_characteristics.js")
+
+function asyncAccumulator() {
+  let accum = []
+  var open = true
+
+  let append = (e) => {
+    if (open)
+      accum.push(e)
+    else
+      throw "Accumulator is closed"
+  }
+
+  var promiseCompleter = null
+  let finalize = () => {
+    open = false
+    promiseCompleter(accum)
+  }
+
+  let result = new Promise((success, reject) => {
+    promiseCompleter = success
+  })
+
+  return {append, finalize, result}
+}
 
 module.exports = function (homebridge) {
   Accessory = homebridge.platformAccessory;
@@ -12,6 +38,20 @@ module.exports = function (homebridge) {
 
   let ThermostatCharacteristics = ThermostatCharacteristicsModule(homebridge)
 
+  function setCastrophe(accessories) {
+    accessories.forEach((accessory) => {
+      accessory.services
+        .filter((service) => service.UUID != Service.AccessoryInformation)
+        .forEach((service) => {
+          service.characteristics.forEach((characteristic) => {
+            characteristic.on('get', (next) => {
+              next(new Error("Platform failed to initialize"))
+            })
+          })
+        })
+    })
+  }
+
   class VivintPlatform {
     constructor(log, config, api) {
       this.log = log
@@ -19,14 +59,13 @@ module.exports = function (homebridge) {
       this.api = api
 
       let VivintApi = VivintApiModule(config, log)
-      let vivintApiPromise = VivintApi.login({username: config.username, password: config.password})
+      this.vivintApiPromise = VivintApi.login({username: config.username, password: config.password})
       let apiLoginRefreshSecs = config.apiLoginRefreshSecs || 1200 // once per 20 minutes default
 
 
-      let deviceSetPromise = vivintApiPromise.then((vivintApi) => {
+      this.deviceSetPromise = this.vivintApiPromise.then((vivintApi) => {
         let DeviceSet = DeviceSetModule(config, log, homebridge, vivintApi, ThermostatCharacteristics, setInterval, Date)
-        let deviceData = vivintApi.deviceSnapshot()
-        let deviceSet = new DeviceSet(deviceData, vivintApi.deviceSnapshotTs())
+        let deviceSet = new DeviceSet()
         setInterval(() => {
 
           vivintApi.renew()
@@ -36,40 +75,59 @@ module.exports = function (homebridge) {
             .catch((err) => log("error refreshing", err))
         }, apiLoginRefreshSecs * 1000)
 
-        return deviceSet;
+        return {deviceSet, DeviceSet};
       })
 
-      let pubNubPromise = vivintApiPromise.then((vivintApi) => vivintApi.connectPubNub())
+      let pubNubPromise = this.vivintApiPromise.then((vivintApi) => vivintApi.connectPubNub())
 
-      Promise.all([pubNubPromise, deviceSetPromise]).then((resolved) => {
-        let pubNub = resolved[0]
-        let deviceSet = resolved[1]
-        pubNub.addListener({
-          status: function(statusEvent) {
-            console.log("status", statusEvent)
-          },
-          message: function(msg) {
-            log("received pubNub msg")
-            log(JSON.stringify(msg.message))
-            deviceSet.handleMessage(msg)
-          },
-          presence: function(presenceEvent) {
-            console.log("presence", presenceEvent)
-          }
-        })
-      })
+      this.cachedAccessories = asyncAccumulator()
+      api.on('didFinishLaunching', () => this.cachedAccessories.finalize())
 
-      this.accessories = (next) => {
-        deviceSetPromise.then(
-          (deviceSet) => next(deviceSet.devices),
-          (error) => {
-            log("error initializing vivint api: " + error)
-            next(null)
-          }
-        )
-      }
+      Promise.all([pubNubPromise, this.vivintApiPromise, this.cachedAccessories.result, this.deviceSetPromise]).then(
+        ([pubNub, vivintApi, cachedAccessories, {DeviceSet, deviceSet}]) => {
+          // add any new devices
+          let cachedIds = cachedAccessories.map((acc) => acc.context.id)
+          let newAccessories = vivintApi.deviceSnapshot()
+              .filter((data) => data._id && ! cachedIds.includes(data._id))
+              .map((deviceData) => DeviceSet.createDeviceAccessory(deviceData))
+              .filter((dvc) => dvc)
+          log("Adding " + newAccessories.length + " new accessories")
+          newAccessories.forEach((acc) => log(acc.context))
+
+          api.registerPlatformAccessories(PluginName, PlatformName, newAccessories)
+          // Todo - remove cachedAccessories not in the snapshot anymore, and don't bind them
+
+          cachedAccessories.forEach((accessory) => deviceSet.bindAccessory(accessory))
+          newAccessories.forEach((accessory) => deviceSet.bindAccessory(accessory))
+
+          pubNub.addListener({
+            status: function(statusEvent) {
+              console.log("status", statusEvent)
+            },
+            message: function(msg) {
+              log("received pubNub msg")
+              log(JSON.stringify(msg.message))
+              deviceSet.handleMessage(msg)
+            },
+            presence: function(presenceEvent) {
+              console.log("presence", presenceEvent)
+            }
+          })
+          deviceSet.handleSnapshot(vivintApi.deviceSnapshot(), vivintApi.deviceSnapshotTs())
+        }
+      ).catch((error) => {
+        log("Error while bootstrapping accessories")
+        log(error)
+        // Make it obvious that things are bad by causing everything to show as "no response"
+        this.cachedAccessories.result.then(setCastrophe)
+      });
+    }
+
+    configureAccessory(accessory) {
+      console.log("received cached accessory", accessory)
+      this.cachedAccessories.append(accessory)
     }
   }
 
-  homebridge.registerPlatform("homebridge-vivint", "Vivint", VivintPlatform);
+  homebridge.registerPlatform(PluginName, PlatformName, VivintPlatform);
 };

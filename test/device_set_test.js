@@ -1,10 +1,11 @@
 const assert = require('assert');
 const DeviceSetModule = require("../lib/device_set.js")
 
-class MockDevice {
+class MockService {
   constructor(name) {
     this.name = name
     this.characteristics = {}
+    this._mockClassName = this.constructor.name
   }
   getCharacteristic(characteristic) {
     if (!(characteristic.name in this.characteristics))
@@ -14,6 +15,27 @@ class MockDevice {
   setCharacteristic(characteristic, value) {
     this.characteristics[characteristic.name] = value
     return this
+  }
+}
+
+class MockPlatformAccessory {
+  constructor(name, uuid, category) {
+    this.name = name
+    this.uuid = uuid
+    this.category = category
+    this.context = {}
+    this.services = []
+    this.addService(new AccessoryInformation)
+  }
+
+  addService(service) {
+    this.services.push(service)
+  }
+
+  getServiceByUUIDAndSubType(mockServiceClass, subtype) {
+    return this.services.find((service) => {
+      return service._mockClassName == mockServiceClass.name
+    })
   }
 }
 
@@ -40,25 +62,36 @@ class Characteristic {
   }
 }
 
-class AccessoryInformation extends MockDevice {}
-class MotionSensor extends MockDevice {}
-class OccupancySensor extends MockDevice {}
-class ContactSensor extends MockDevice {}
+class AccessoryInformation extends MockService {}
+class MotionSensor extends MockService {}
+class OccupancySensor extends MockService {}
+class ContactSensor extends MockService {}
+class LockMechanism extends MockService {}
 const MockHomebridge = {
+  platformAccessory: MockPlatformAccessory,
   hap: {
     uuid: { generate: (input) => input },
     Service: {
       AccessoryInformation: AccessoryInformation,
       ContactSensor: ContactSensor,
       MotionSensor: MotionSensor,
+      LockMechanism: LockMechanism,
       OccupancySensor: OccupancySensor
+    },
+    Accessory: {
+      Categories: {
+        OTHER: "OTHER",
+        DOOR: "DOOR",
+        WINDOW: "WINDOW"
+      }
     },
     Characteristic: {
       Manufacturer: {name: "Manufacturer"},
       Model: {name: "Model"},
       SerialNumber: {name: "SerialNumber"},
       ContactSensorState: {name: "ContactSensorState", CONTACT_DETECTED: "CONTACT_DETECTED", CONTACT_NOT_DETECTED: "CONTACT_NOT_DETECTED"},
-      LockTargetState: {name: "LockTargetState", SECURED: "SECURED", UNSECURED: "UNSECURED"},
+      LockCurrentState: {name: "LockCurrentState", SECURED: "LCS_SECURED", UNSECURED: "LCS_UNSECURED"},
+      LockTargetState: {name: "LockTargetState", SECURED: "LTS_SECURED", UNSECURED: "LTS_UNSECURED"},
       MotionDetected: {name: "MotionDetected", SECURED: "SECURED", UNSECURED: "UNSECURED"},
       OccupancyDetected: {name: "OccupancyDetected", OCCUPANCY_DETECTED: 'OCCUPANCY_DETECTED', OCCUPANCY_NOT_DETECTED: 'OCCUPANCY_NOT_DETECTED' }
     }
@@ -154,7 +187,18 @@ describe('DeviceSet', function() {
   var MockSetInterval
   var MockDate
   let Characteristic = MockHomebridge.hap.Characteristic
+  let Service = MockHomebridge.hap.Service
   let motionDetectedOccupancySensorMins = 1
+
+  let deviceSetFromData = (data, ts) => {
+    let deviceSet = new DeviceSet()
+    data.forEach((deviceData) => {
+      let accessory = DeviceSet.createDeviceAccessory(deviceData)
+      deviceSet.bindAccessory(accessory)
+    })
+    deviceSet.handleSnapshot(data, snapshotTs)
+    return deviceSet
+  }
 
   beforeEach(() => {
     let timers = []
@@ -172,20 +216,20 @@ describe('DeviceSet', function() {
 
   describe('#constructor', function() {
     it('populates the devices with the given delegators', function() {
-      var deviceSet = new DeviceSet([mockWindowSensor(), mockDoorSensor(), mockDoorLock()], snapshotTs)
+      var deviceSet = deviceSetFromData([mockWindowSensor(), mockDoorSensor(), mockDoorLock()], snapshotTs)
       assert.equal(3, deviceSet.devices.length)
-      assert.equal("DoorWindowSensor", deviceSet.devicesById[28].getType())
-      assert.equal("DoorWindowSensor", deviceSet.devicesById[42].getType())
-      assert.equal("Lock", deviceSet.devicesById[24].getType())
+      console.log(deviceSet)
+      assert.equal("ContactSensor", deviceSet.devicesById[28].constructor.name)
+      assert.equal("ContactSensor", deviceSet.devicesById[42].constructor.name)
+      assert.equal("Lock", deviceSet.devicesById[24].constructor.name)
     });
   });
 
   describe("#motionSensorOccupancy", function() {
     it('turns on occupancy sensor for the configured duration when the motion sensor actives', () => {
-      var deviceSet = new DeviceSet([mockMotionSensor()])
+      var deviceSet = deviceSetFromData([mockMotionSensor()])
       let motionSensor = deviceSet.devicesById[45]
-      let services = motionSensor.getServices()
-      let occupancy = services[2]
+      let occupancy = motionSensor.occupancyService
       let occupancyDetected = occupancy.getCharacteristic(Characteristic.OccupancyDetected)
       assert.equal(1, MockSetInterval.getTimers().length)
       let occupancyInterval = MockSetInterval.getTimers()[0]
@@ -221,7 +265,7 @@ describe('DeviceSet', function() {
 
   describe('#handleSnapshot', function() {
     it("receives a new snapshot of data and publishes to homebridge", function() {
-      var deviceSet = new DeviceSet([mockWindowSensor()], snapshotTs)
+      var deviceSet = deviceSetFromData([mockWindowSensor()], snapshotTs)
       var basementShopWindow = deviceSet.devicesById[42]
 
       let mockWindowSensorNewSnapshot = mockWindowSensor()
@@ -235,7 +279,7 @@ describe('DeviceSet', function() {
   });
   describe('#handleMessage', function() {
     it("updates the data and publishes an update to homebridge", function() {
-      var deviceSet = new DeviceSet([mockWindowSensor(), mockDoorSensor()], snapshotTs)
+      var deviceSet = deviceSetFromData([mockWindowSensor(), mockDoorSensor()], snapshotTs)
       var basementShopWindow = deviceSet.devicesById[42]
       let Characteristic = MockHomebridge.hap.Characteristic
 
@@ -252,7 +296,7 @@ describe('DeviceSet', function() {
     })
 
     it("ignores messages originating before the current snapshot", function() {
-      var deviceSet = new DeviceSet([mockWindowSensor(), mockDoorSensor()], snapshotTs)
+      var deviceSet = deviceSetFromData([mockWindowSensor(), mockDoorSensor()], snapshotTs)
       console.log(deviceSet)
       var basementShopWindow = deviceSet.devicesById[42]
       let Characteristic = MockHomebridge.hap.Characteristic
