@@ -15,10 +15,11 @@ Currently, the following items are supported:
 * Thermostat
 * Motion sensors
 
-** Garage Door Opener
-** Alarm Panel (arm home/away, disarm)
-** PIV Motion Detectors (Each Vivint camera doubles as a motion detector - piv meaning 'person in view')
-** Added 'low battery' indicator to each wireless sensor
+* Garage Door Opener
+* Alarm Panel (arm home/away, disarm)
+* PIV Motion Detectors (Each Vivint camera doubles as a motion detector - piv meaning 'person in view')
+* Added 'low battery' indicator to each wireless sensor
+* Added battery service to all wireless locks and sensors so homekit will show actual battery level
 
 Support for adding additional devices is relatively trivial. Please open a PR if you'd like to see more!
 
