@@ -14,7 +14,6 @@ Currently, the following items are supported:
 * Contact sensors
 * Thermostat
 * Motion sensors
-
 * Garage Door Opener
 * Alarm Panel (arm home/away, disarm)
 * PIV Motion Detectors (Each Vivint camera doubles as a motion detector - piv meaning 'person in view')
