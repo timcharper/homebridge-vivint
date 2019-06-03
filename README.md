@@ -14,6 +14,12 @@ Currently, the following items are supported:
 * Contact sensors
 * Thermostat
 * Motion sensors
+* Garage Door Opener
+* Alarm Panel (arm home/away, disarm)
+* PIV Motion Detectors (Each Vivint camera doubles as a motion detector - piv meaning 'person in view')
+* Added 'low battery' indicator to each wireless sensor
+* Added battery service to all wireless locks and sensors so homekit will show actual battery level
+* Z-Wave switches (binary and dimmer) that are paired with the vivint panel. Be sure they are labeled "light" or "fan" if they control those respective devices.
 
 Support for adding additional devices is relatively trivial. Please open a PR if you'd like to see more!
 
@@ -26,6 +32,7 @@ Configuration of the plugin is simple. The Vivint plugin is a dynamic platform w
       "username": "your-vivint-user@email.com",
       "password": "vivint-user-password",
       "apiLoginRefreshSecs": 1200,
+      "lowbatterylevel": 15
     }
 
 A general recommendation: consider creating and using a new Vivint account named "Apple Home". This way, your Vivint logs will show "the front door was unlocked by Apple Home", etc.
@@ -36,5 +43,4 @@ Configuration options overview:
 * **password**
 * **apiLoginRefreshSecs** - How often should Vivint Homebridge renew the session token? The token that Vivint provides when authenticating will expire. Also, when this renewal occurs, the plugin requests another snapshot. The event stream can sometimes fail to report device state appropriately and events can come out of order with the snapshot, or updates can be missed entirely. The occasional snapshot retrieval will auto-correct any such errors. Avoid setting this any more frequent that 10 minutes.
 * **motionDetectedOccupancySensorMins** - Homebridge-vivint will create occupancy sensors for motion sensors that will stay active for X minutes after a motion event is detected. This value configures for how long that occupancy sensor will stay active if no further motion events are detected. Note: Vivint's reporting of motion events over the event stream can be a little inconsistent, at times. As a recommendation, don't plan on creating Homekit automations that respond to Vivint motion events.
-
-
+* **lowbatterylevel** - How low the battery level should be before the plugin reports to HomeKit that the battery is low.
