@@ -87,7 +87,7 @@ module.exports = function (homebridge) {
         ([pubNub, vivintApi, cachedAccessories, {DeviceSet, deviceSet}]) => {
           // add any new devices
           let cachedIds = cachedAccessories.map((acc) => acc.context.id)
-          let newAccessories = vivintApi.deviceSnapshot()
+          let newAccessories = vivintApi.deviceSnapshot().d
               .filter((data) => data._id && ! cachedIds.includes(data._id))
               .map((deviceData) => DeviceSet.createDeviceAccessory(deviceData))
               .filter((dvc) => dvc)
