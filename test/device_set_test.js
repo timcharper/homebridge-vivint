@@ -67,6 +67,7 @@ class MotionSensor extends MockService {}
 class OccupancySensor extends MockService {}
 class ContactSensor extends MockService {}
 class LockMechanism extends MockService {}
+class BatteryService extends MockService {}
 const MockHomebridge = {
   platformAccessory: MockPlatformAccessory,
   hap: {
@@ -76,6 +77,7 @@ const MockHomebridge = {
       ContactSensor: ContactSensor,
       MotionSensor: MotionSensor,
       LockMechanism: LockMechanism,
+      BatteryService: LockMechanism,
       OccupancySensor: OccupancySensor
     },
     Accessory: {
@@ -89,6 +91,9 @@ const MockHomebridge = {
       Manufacturer: {name: "Manufacturer"},
       Model: {name: "Model"},
       SerialNumber: {name: "SerialNumber"},
+      ChargingState: {name: "ChargingState"},
+      StatusLowBattery: {name: "StatusLowBattery"},
+      BatteryLevel: {name: "BatteryLevel"},
       ContactSensorState: {name: "ContactSensorState", CONTACT_DETECTED: "CONTACT_DETECTED", CONTACT_NOT_DETECTED: "CONTACT_NOT_DETECTED"},
       LockCurrentState: {name: "LockCurrentState", SECURED: "LCS_SECURED", UNSECURED: "LCS_UNSECURED"},
       LockTargetState: {name: "LockTargetState", SECURED: "LTS_SECURED", UNSECURED: "LTS_UNSECURED"},
@@ -196,7 +201,8 @@ describe('DeviceSet', function() {
       let accessory = DeviceSet.createDeviceAccessory(deviceData)
       deviceSet.bindAccessory(accessory)
     })
-    deviceSet.handleSnapshot(data, snapshotTs)
+    console.log("data", data);
+    deviceSet.handleSnapshot({d: data}, snapshotTs)
     return deviceSet
   }
 
@@ -273,7 +279,7 @@ describe('DeviceSet', function() {
       let Characteristic = MockHomebridge.hap.Characteristic
 
       assert.equal(basementShopWindow.contactSensorValue(), Characteristic.ContactSensorState.CONTACT_DETECTED);
-      deviceSet.handleSnapshot([mockWindowSensorNewSnapshot], snapshotTs_later)
+      deviceSet.handleSnapshot({d: [mockWindowSensorNewSnapshot]}, snapshotTs_later)
       assert.equal(basementShopWindow.contactSensorValue(), Characteristic.ContactSensorState.CONTACT_NOT_DETECTED);
     })
   });
