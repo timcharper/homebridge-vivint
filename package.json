@@ -1,5 +1,5 @@
 {
-  "name": "homebridge-vivint-latest",
+  "name": "@michaelmade/homebridge-vivint-latest",
   "version": "0.0.6",
   "description": "Control Vivint with HomeBridge",
   "license": "ISC",
@@ -9,10 +9,10 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git://github.com/timcharper/homebridge-vivint.git"
+    "url": "git://github.com/michaelmade/homebridge-vivint-latest.git"
   },
   "bugs": {
-    "url": "http://github.com/timcharper/homebridge-vivint/issues"
+    "url": "http://github.com/michaelmade/homebridge-vivint-latest/issues"
   },
   "engines": {
     "node": ">=0.12.0",
@@ -32,6 +32,6 @@
     "test": "mocha"
   },
   "publishConfig": {
-    "registry": "https://npm.pkg.github.com/"
+    "registry": "https://npm.pkg.github.com/michaelmade"
   }
 }
