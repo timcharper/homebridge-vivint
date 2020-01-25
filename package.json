@@ -9,7 +9,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git://github.com/timcharper/homebridge-vivint.git"
+    "url": "git://github.com/michaelmade/homebridge-vivint-latest.git"
   },
   "bugs": {
     "url": "http://github.com/timcharper/homebridge-vivint/issues"
@@ -32,6 +32,6 @@
     "test": "mocha"
   },
   "publishConfig": {
-    "registry": "https://npm.pkg.github.com/michaelmade/homebridge-vivint-latest"
+    "registry": "https://npm.pkg.github.com/"
   }
 }
