@@ -1,5 +1,5 @@
 {
-  "name": "@michaelmade/homebridge-vivint-latest",
+  "name": "homebridge-vivint-latest",
   "version": "0.0.6",
   "description": "Control Vivint with HomeBridge",
   "license": "ISC",
