@@ -1,6 +1,6 @@
 {
-  "name": "homebridge-vivint",
-  "version": "0.0.4",
+  "name": "homebridge-vivint-latest",
+  "version": "0.0.6",
   "description": "Control Vivint with HomeBridge",
   "license": "ISC",
   "author": "Tim Harper <timcharper@gmail.com>",
@@ -30,5 +30,8 @@
   },
   "scripts": {
     "test": "mocha"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
   }
 }
