@@ -125,7 +125,7 @@ module.exports = function (homebridge) {
     }
 
     configureAccessory(accessory) {
-      console.log("received cached accessory", accessory)
+      //console.log("received cached accessory", accessory)
       this.cachedAccessories.append(accessory)
     }
   }

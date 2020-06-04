@@ -1,0 +1,54 @@
+{
+    "pluginAlias": "Vivint",
+    "pluginType": "platform",
+    "singular": true,
+    "schema": {
+      "type": "object",
+      "properties": {
+        "username": {
+            "type": "string",
+            "title": "Vivint username",
+            "format": "email",
+            "default": "",
+            "required": true
+        },
+        "password": {
+            "type": "string",
+            "title": "Vivint password",
+            "default": "",
+            "required": true
+        },
+        "apiLoginRefreshSecs": {
+            "type": "integer",
+            "title": "API Refresh",
+            "description": "How often should Vivint Homebridge renew the session token.",
+            "default": 1200
+        },
+        "lowbatterylevel": {
+            "type": "integer",
+            "title": "Low Battery Level",
+            "description": "How low the battery level should be before the plugin reports to HomeKit that the battery is low.",
+            "default": 15
+        },
+        "ignoreDeviceTypes": {
+            "title": "Ignored Device Types",
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "title": "Device Type",
+              "type": "string",
+              "enum": [
+                "primary_touch_link_device",
+                "thermostat_device",
+                "door_lock_device",
+                "garage_door_device",
+                "camera_device",
+                "wireless_sensor"
+              ]
+            }
+        }
+      }
+    },
+    "form": null,
+    "display": null
+  }
