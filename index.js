@@ -88,8 +88,8 @@ module.exports = function (homebridge) {
         ([pubNub, vivintApi, cachedAccessories, {DeviceSet, deviceSet}]) => {
           // add any new devices
           let cachedIds = cachedAccessories.map((acc) => acc.context.id)
-          let newAccessories = vivintApi.deviceSnapshot().d
-              .filter((data) => data._id && ! cachedIds.includes(data._id))
+          let newAccessories = vivintApi.deviceSnapshot().Devices
+              .filter((data) => data.Id && !cachedIds.includes(data.Id))
               .map((deviceData) => DeviceSet.createDeviceAccessory(deviceData))
               .filter((dvc) => dvc)
           log("Adding " + newAccessories.length + " new accessories")
@@ -108,7 +108,7 @@ module.exports = function (homebridge) {
             message: function(msg) {
               log("received pubNub msg")
               log(JSON.stringify(msg.message))
-              deviceSet.handleMessage(msg)
+              deviceSet.handleMessage(vivintApi.parsePubNub(msg.message))
             },
             presence: function(presenceEvent) {
               console.log("presence", presenceEvent)
