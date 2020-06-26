@@ -63,16 +63,21 @@ module.exports = function (homebridge) {
       this.vivintApiPromise = VivintApi.login({username: config.username, password: config.password}, 1)
       let apiLoginRefreshSecs = config.apiLoginRefreshSecs || 1200 // once per 20 minutes default
 
-
       this.deviceSetPromise = this.vivintApiPromise.then((vivintApi) => {
         let DeviceSet = DeviceSetModule(config, log, homebridge, vivintApi, ThermostatCharacteristics, setInterval, Date)
         let deviceSet = new DeviceSet()
+
         setInterval(() => {
           vivintApi.renew()
-            .then((_) => vivintApi.renewSystemInfo())
-            .then((_) => deviceSet.handleSnapshot(vivintApi.deviceSnapshot(), vivintApi.deviceSnapshotTs()))
-            .catch((err) => log("Error refreshing", err))
+            .catch((err) => log("Error refreshing login info", err))
         }, apiLoginRefreshSecs * 1000)
+
+        //Setting up the system info refresh to keep the notification stream active
+        setInterval(() => {
+            vivintApi.renewSystemInfo()
+              .then((vivintApi) => deviceSet.handleSnapshot(vivintApi.deviceSnapshot(), vivintApi.deviceSnapshotTs()))
+              .catch((err) => log("Error getting system info", err))
+        }, (apiLoginRefreshSecs / 20) * 1000)
 
         return {deviceSet, DeviceSet}
       })
@@ -84,24 +89,37 @@ module.exports = function (homebridge) {
 
       Promise.all([pubNubPromise, this.vivintApiPromise, this.cachedAccessories.result, this.deviceSetPromise]).then(
         ([pubNub, vivintApi, cachedAccessories, {DeviceSet, deviceSet}]) => {
-          // add any new devices
-          let cachedIds = cachedAccessories.map((acc) => acc.context.id)
-          let newAccessories = vivintApi.deviceSnapshot().Devices
-              .filter((data) => data.Id && !cachedIds.includes(data.Id))
+          
+          let snapshotDevices = vivintApi.deviceSnapshot().Devices
+          let snapshotAccessories = snapshotDevices
+              .filter((data) => data.Id)
               .map((deviceData) => DeviceSet.createDeviceAccessory(deviceData))
               .filter((dvc) => dvc)
+
+          let snapshotAccessoriesIds = snapshotAccessories.map((acc) => acc.context.id)
+          let removedAccessories = cachedAccessories
+              .filter((acc) => !snapshotAccessoriesIds.includes(acc.context.id))
+          
+          let cachedIds = cachedAccessories.map((acc) => acc.context.id)
+          let newAccessories = snapshotAccessories
+              .filter((acc) => !cachedIds.includes(acc.context.id))
+
+          log("Removing " + removedAccessories.length + " stale accessories")
+          removedAccessories.forEach((acc) => log(acc.context))
+
           log("Adding " + newAccessories.length + " new accessories")
           newAccessories.forEach((acc) => log(acc.context))
 
+          api.unregisterPlatformAccessories(PluginName, PlatformName, removedAccessories)
           api.registerPlatformAccessories(PluginName, PlatformName, newAccessories)
-          // Todo - remove cachedAccessories not in the snapshot anymore, and don't bind them
 
+          cachedAccessories = cachedAccessories.filter((el) => !removedAccessories.includes(el));
           cachedAccessories.forEach((accessory) => deviceSet.bindAccessory(accessory))
           newAccessories.forEach((accessory) => deviceSet.bindAccessory(accessory))
 
           pubNub.addListener({
             status: function(statusEvent) {
-              //Log unsuccesful 
+              //Log unsuccesful event, PubNub SDK will reconnect automatically
               if (statusEvent.category !== 'PNConnectedCategory')
                 log("Could not connect to Pubnub, reconnecting...", statusEvent)
             },
