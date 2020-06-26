@@ -38,7 +38,7 @@ module.exports = function (homebridge) {
 
   let ThermostatCharacteristics = ThermostatCharacteristicsModule(homebridge)
 
-  function setCastrophe(accessories) {
+  function setCatastrophe(accessories) {
     accessories.forEach((accessory) => {
       accessory.services
         .filter((service) => service.UUID != Service.AccessoryInformation)
@@ -68,7 +68,6 @@ module.exports = function (homebridge) {
         let deviceSet = new DeviceSet()
 
         setInterval(() => {
-
           vivintApi.renew()
             .catch((err) => log("Error refreshing login info", err))
         }, apiLoginRefreshSecs * 1000)
@@ -124,9 +123,10 @@ module.exports = function (homebridge) {
               if (statusEvent.category !== 'PNConnectedCategory')
                 log("Could not connect to Pubnub, reconnecting...", statusEvent)
             },
+
             message: function(msg) {
-              //log("received pubNub msg")
-              //log(JSON.stringify(msg.message))
+              //log("Parsed PubNub message")
+              //log(JSON.stringify(vivintApi.parsePubNub(msg.message)))
               deviceSet.handleMessage(vivintApi.parsePubNub(msg.message))
             }
           })
@@ -136,7 +136,7 @@ module.exports = function (homebridge) {
         log("Error while bootstrapping accessories")
         log(error)
         // Make it obvious that things are bad by causing everything to show as "no response"
-        this.cachedAccessories.result.then(setCastrophe)
+        this.cachedAccessories.result.then(setCatastrophe)
       });
     }
 
