@@ -1,6 +1,6 @@
 {
   "name": "homebridge-vivint",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Control Vivint with HomeBridge",
   "license": "ISC",
   "author": "Tim Harper <timcharper@gmail.com>",
