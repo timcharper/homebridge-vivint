@@ -4,7 +4,9 @@
   "description": "Control Vivint with HomeBridge",
   "license": "ISC",
   "author": "Alexandr Balan <balansse@gmail.com>",
-  "contributors": ["Tim Harper <timcharper@gmail.com>"],
+  "contributors": [
+    "Tim Harper <timcharper@gmail.com>"
+  ],
   "keywords": [
     "homebridge-plugin"
   ],
