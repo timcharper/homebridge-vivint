@@ -2,7 +2,10 @@
 
 ## Overview
 
-This plugin allows Homekit to you to use your Vivint SmartHome products in Apple Homekit.
+This is a fork of [homebridge-vivint](https://github.com/timcharper/homebridge-vivint) plugin for [homebridge](https://github.com/nfarina/homebridge).
+It allows Homekit to you to use your Vivint SmartHome products in Apple Homekit. The main changes in this fork include:
+  * Ignore list for specific device types managed by Vivint (useful in case of external integrations like Nest or MyQ that may be managed directly by another plugin) 
+  * Dynamic accessory cache management - any accessories that are no longer managed by the plugin or are disconnected from Vivint system would be removed from the cache automatically
 
 Homebridge-Vivint was written by a former Vivint employee, Tim Harper. This project is not officially endorsed, sponsored, or affiliated with Vivint SmartHome in any way.
 
@@ -27,12 +30,14 @@ Support for adding additional devices is relatively trivial. Please open a PR if
 
 Configuration of the plugin is simple. The Vivint plugin is a dynamic platform which caches the accessories registered.
 
+Configuration sample:
     {
       "platform": "Vivint",
       "username": "your-vivint-user@email.com",
       "password": "vivint-user-password",
       "apiLoginRefreshSecs": 1200,
-      "lowbatterylevel": 15
+      "lowbatterylevel": 15,
+      "ignoreDeviceTypes": ["thermostat_device", "garage_door_device"]
     }
 
 A general recommendation: consider creating and using a new Vivint account named "Apple Home". This way, your Vivint logs will show "the front door was unlocked by Apple Home", etc.

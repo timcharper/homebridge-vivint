@@ -1,18 +1,19 @@
 {
-  "name": "homebridge-vivint",
+  "name": "@balansse/homebridge-vivint",
   "version": "0.0.8",
   "description": "Control Vivint with HomeBridge",
   "license": "ISC",
-  "author": "Tim Harper <timcharper@gmail.com>",
+  "author": "Alexandr Balan <balansse@gmail.com>",
+  "contributors": ["Tim Harper <timcharper@gmail.com>"],
   "keywords": [
     "homebridge-plugin"
   ],
   "repository": {
     "type": "git",
-    "url": "git://github.com/timcharper/homebridge-vivint.git"
+    "url": "git://github.com/balansse/homebridge-vivint.git"
   },
   "bugs": {
-    "url": "http://github.com/timcharper/homebridge-vivint/issues"
+    "url": "http://github.com/balansse/homebridge-vivint/issues"
   },
   "engines": {
     "node": ">=0.12.0",
@@ -27,5 +28,14 @@
   },
   "devDependencies": {
     "mocha": "^5.2.0"
+  },
+  "homepage": "https://github.com/balansse/homebridge-vivint#readme",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib",
+    "test": "test"
+  },
+  "scripts": {
+    "test": "mocha"
   }
 }
