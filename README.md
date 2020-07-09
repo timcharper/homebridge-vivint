@@ -32,6 +32,7 @@ Support for adding additional devices is relatively trivial. Please open a PR if
 Configuration of the plugin is simple. The Vivint plugin is a dynamic platform which caches the accessories registered.
 
 Configuration sample:
+
     {
       "platform": "Vivint",
       "username": "your-vivint-user@email.com",
