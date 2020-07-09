@@ -3,7 +3,7 @@
 ## Overview
 
 This is a fork of [homebridge-vivint](https://github.com/timcharper/homebridge-vivint) plugin for [homebridge](https://github.com/nfarina/homebridge).
-It allows Homekit to you to use your Vivint SmartHome products in Apple Homekit. The main changes in this fork include:
+It allows to use your Vivint SmartHome products in Apple Homekit. The main changes in this fork include:
   * Ignore list for specific device types managed by Vivint (useful in case of external integrations like Nest or MyQ that may be managed directly by another plugin) 
   * Dynamic accessory cache management - any accessories that are no longer managed by the plugin or are disconnected from Vivint system would be removed from the cache automatically
   * Homebridge Config UI X Web UI settings support.
