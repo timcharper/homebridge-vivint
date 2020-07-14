@@ -1,4 +1,4 @@
-# Homebridge-Vivint
+# @balansse/Homebridge-Vivint
 
 ## Overview
 
@@ -21,6 +21,9 @@ Currently, the following items are supported:
 * Garage Door Opener
 * Alarm Panel (arm home/away, disarm)
 * PIV Motion Detectors (Each Vivint camera doubles as a motion detector - piv meaning 'person in view')
+* Tilt sensors
+* Fire alert sensors
+* Glass break sensors
 * Added 'low battery' indicator to each wireless sensor
 * Added battery service to all wireless locks and sensors so homekit will show actual battery level
 * Z-Wave switches (binary and dimmer) that are paired with the vivint panel. Be sure they are labeled "light" or "fan" if they control those respective devices.
