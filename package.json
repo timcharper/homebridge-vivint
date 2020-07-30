@@ -26,7 +26,8 @@
     "isobject": "^3.0.1",
     "pubnub": "^4.21.2",
     "request": "^2.87.0",
-    "request-promise-native": "^1.0.5"
+    "request-promise-native": "^1.0.5",
+    "ffmpeg-for-homebridge": "0.0.6"
   },
   "devDependencies": {
     "mocha": "^5.2.0"
