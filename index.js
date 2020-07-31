@@ -67,8 +67,10 @@ module.exports = function (homebridge) {
         let DeviceSet = DeviceSetModule(config, log, homebridge, vivintApi, ThermostatCharacteristics, setInterval, Date)
         let deviceSet = new DeviceSet()
 
+        //Store panel login info
         setInterval(() => {
           vivintApi.renew()
+            .then((vivintApi) => vivintApi.renewPanelLogin())
             .catch((err) => log("Error refreshing login info", err))
         }, apiLoginRefreshSecs * 1000)
 
@@ -119,11 +121,15 @@ module.exports = function (homebridge) {
 
           pubNub.addListener({
             status: function(statusEvent) {
-              //Log unsuccesful event, PubNub SDK will reconnect automatically
-              if (statusEvent.category !== 'PNConnectedCategory')
-                log("Could not connect to Pubnub, reconnecting...", statusEvent)
+              switch(statusEvent.category){
+                case 'PNConnectedCategory':
+                case 'PNReconnectedCategory':
+                  log("Connected to Pubnub")
+                  break
+                default:
+                  log("Could not connect to Pubnub, reconnecting...", statusEvent)
+              }
             },
-
             message: function(msg) {
               //log("Parsed PubNub message")
               //log(JSON.stringify(vivintApi.parsePubNub(msg.message)))
