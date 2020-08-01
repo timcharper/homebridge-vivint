@@ -1,5 +1,7 @@
 # @balansse/Homebridge-Vivint
 
+[![npm](https://badgen.net/npm/v/homebridge-camera-ffmpeg) ![npm](https://badgen.net/npm/dt/@balansse/homebridge-vivint)](https://www.npmjs.com/package/@balansse/homebridge-vivint)
+
 ## Overview
 
 This is a fork of [homebridge-vivint](https://github.com/timcharper/homebridge-vivint) plugin for [homebridge](https://github.com/nfarina/homebridge).
