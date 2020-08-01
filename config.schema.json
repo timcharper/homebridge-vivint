@@ -24,12 +24,6 @@
             "description": "How often should Vivint Homebridge renew the session token.",
             "default": 1200
         },
-        "lowbatterylevel": {
-            "type": "integer",
-            "title": "Low Battery Level",
-            "description": "How low the battery level should be before the plugin reports to HomeKit that the battery is low.",
-            "default": 15
-        },
         "ignoreDeviceTypes": {
             "title": "Ignored Device Types",
             "type": "array",
@@ -46,6 +40,11 @@
                 "wireless_sensor"
               ]
             }
+        },
+        "showCameraConfig": {
+          "title": "Show camera config",
+          "description": "Shows [homebridge-camera-ffmpeg](https://github.com/Sunoo/homebridge-camera-ffmpeg) configuration for all detected cameras in the log",
+          "type": "boolean"
         }
       }
     },
