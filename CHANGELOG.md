@@ -1,3 +1,13 @@
+#### 0.0.11 (2020-08-02)
+
+### Bug Fixes
+
+- Fixed thermostat handling
+
+##### Other Changes
+
+- More accurate security panel status mapping
+
 #### 0.0.10 (2020-07-31)
 
 ### Changes
