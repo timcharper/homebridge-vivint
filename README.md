@@ -21,7 +21,7 @@ Ensure you are running Node v10.17.0 or higher (this version is required by Home
 Either install and configure using Config UI X or you can manually install the plugin by running:
 
 ```
-npm install -g --unsafe-perm @balansse/homebridge-vivint
+npm install -g @balansse/homebridge-vivint
 ```
 
 Then, add the following configuration to the `platforms` array in your Homebridge `config.json`.
