@@ -1,6 +1,6 @@
 # @balansse/Homebridge-Vivint
 
-[![npm](https://badgen.net/npm/v/homebridge-camera-ffmpeg) ![npm](https://badgen.net/npm/dt/@balansse/homebridge-vivint)](https://www.npmjs.com/package/@balansse/homebridge-vivint)
+[![npm](https://badgen.net/npm/v/@balansse/homebridge-vivint) ![npm](https://badgen.net/npm/dt/@balansse/homebridge-vivint)](https://www.npmjs.com/package/@balansse/homebridge-vivint) [![Donate](https://img.shields.io/badge/Donate-PayPal-blue.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=6NDY338ETGK4Q&currency_code=USD&source=url)
 
 ## Overview
 
@@ -11,6 +11,33 @@ It allows to use your Vivint SmartHome products in Apple Homekit. The main chang
   * Homebridge Config UI X Web UI settings support.
 
 Homebridge-Vivint was written by a former Vivint employee, Tim Harper. This project is not officially endorsed, sponsored, or affiliated with Vivint SmartHome in any way.
+
+## Usage
+
+This plugin supports installation and changing settings (for `config.js`) via the popular [Config UI X plugin](https://github.com/oznu/homebridge-config-ui-x) (recommended for easiest usage).
+
+Ensure you are running Node v10.17.0 or higher (this version is required by Homebridge v1.0.0). You can check by using `node -v`.
+
+Either install and configure using Config UI X or you can manually install the plugin by running:
+
+```
+npm install -g @balansse/homebridge-vivint
+```
+
+Then, add the following configuration to the `platforms` array in your Homebridge `config.json`.
+
+
+```
+{
+    {
+      "platform": "Vivint",
+      "username": "your-vivint-user@email.com",
+      "password": "vivint-user-password"
+    }
+}
+```
+
+That's it! The plugin will automatically load all supported Vivint devices into Homebridge.
 
 ## Supported Items
 
