@@ -1,3 +1,9 @@
+#### 0.0.12 (2020-08-11)
+
+### Bug Fixes
+
+- Fixed Panel arm/disarm notification lag
+
 #### 0.0.11 (2020-08-02)
 
 ### Bug Fixes
