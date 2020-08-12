@@ -44,8 +44,8 @@ module.exports = function (homebridge) {
         .filter((service) => service.UUID != Service.AccessoryInformation)
         .forEach((service) => {
           service.characteristics.forEach((characteristic) => {
-            characteristic.on('get', (next) => {
-              next(new Error("Platform failed to initialize"))
+            characteristic.on('get', (callback) => {
+              callback(new Error("Platform failed to initialize"))
             })
           })
         })
