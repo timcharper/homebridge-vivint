@@ -21,7 +21,7 @@ module.exports = function (homebridge) {
       let config_apiLoginRefreshSecs = config.apiLoginRefreshSecs || 1200 // once per 20 minutes default
 
       let VivintApi = VivintApiModule(config, log)
-      this.vivintApiPromise = VivintApi.login({username: config.username, password: config.password}, 1)
+      this.vivintApiPromise = VivintApi.login({username: config.username, password: config.password})
 
       this.pubNubPromise = this.vivintApiPromise
         .then((vivintApi) => vivintApi.connectPubNub())
