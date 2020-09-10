@@ -32,6 +32,16 @@
     "mocha": "^5.2.0"
   },
   "homepage": "https://github.com/balansse/homebridge-vivint#readme",
+  "funding": [
+    {
+      "type" : "kofi",
+      "url" : "https://ko-fi.com/balansse"
+    },
+    {
+      "type" : "paypal",
+      "url" : "https://paypal.me/balansse"
+    }
+  ],
   "main": "index.js",
   "directories": {
     "lib": "lib",
