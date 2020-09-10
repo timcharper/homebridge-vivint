@@ -1,6 +1,6 @@
 {
   "name": "@balansse/homebridge-vivint",
-  "version": "0.0.13",
+  "version": "1.0.0",
   "description": "Control Vivint with HomeBridge",
   "license": "ISC",
   "author": "Alexandr Balan <balansse@gmail.com>",
@@ -34,12 +34,12 @@
   "homepage": "https://github.com/balansse/homebridge-vivint#readme",
   "funding": [
     {
-      "type" : "kofi",
-      "url" : "https://ko-fi.com/balansse"
+      "type": "kofi",
+      "url": "https://ko-fi.com/balansse"
     },
     {
-      "type" : "paypal",
-      "url" : "https://paypal.me/balansse"
+      "type": "paypal",
+      "url": "https://paypal.me/balansse"
     }
   ],
   "main": "index.js",
