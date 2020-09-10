@@ -18,8 +18,8 @@
     "url": "http://github.com/balansse/homebridge-vivint/issues"
   },
   "engines": {
-    "node": ">=0.12.0",
-    "homebridge": ">=0.2.0"
+    "node": ">=10",
+    "homebridge": ">=1.0.0"
   },
   "dependencies": {
     "debounce-promise": "^3.1.0",
@@ -32,6 +32,16 @@
     "mocha": "^5.2.0"
   },
   "homepage": "https://github.com/balansse/homebridge-vivint#readme",
+  "funding": [
+    {
+      "type" : "kofi",
+      "url" : "https://ko-fi.com/balansse"
+    },
+    {
+      "type" : "paypal",
+      "url" : "https://paypal.me/balansse"
+    }
+  ],
   "main": "index.js",
   "directories": {
     "lib": "lib",
