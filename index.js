@@ -11,6 +11,20 @@ module.exports = function (homebridge) {
   Characteristic = homebridge.hap.Characteristic;
   UUIDGen = homebridge.hap.uuid;
 
+  function setCatastrophe(accessories) {
+    accessories.forEach((accessory) => {
+      accessory.services
+      .filter((service) => service.UUID != Service.AccessoryInformation)
+      .forEach((service) => {
+        service.characteristics.forEach((characteristic) => {
+          characteristic.on('get', (callback) => {
+            callback(new Error("Platform failed to initialize"))
+          })
+        })
+      })
+    })
+  }
+
   class VivintPlatform {
     constructor(log, config, api) {
       this.log = log
@@ -27,7 +41,8 @@ module.exports = function (homebridge) {
         .then((vivintApi) => vivintApi.connectPubNub())
 
       this.initialLoad = 
-          Promise.all([this.vivintApiPromise, this.pubNubPromise, this.cachedAccessories]).then(
+          Promise.all([this.vivintApiPromise, this.pubNubPromise, this.cachedAccessories])
+          .then(
             ([vivintApi, pubNub, cachedAccessories]) => {
               let DeviceSet = DeviceSetModule(config, log, homebridge, vivintApi)
               let deviceSet = new DeviceSet()
@@ -38,21 +53,20 @@ module.exports = function (homebridge) {
                   .map((deviceData) => DeviceSet.createDeviceAccessory(deviceData))
                   .filter((dvc) => dvc)
     
-              let snapshotAccessoriesIds = snapshotAccessories.map((acc) => acc.context.id)
+              //Remove stale/ignored accessories                  
               let removedAccessories = cachedAccessories
-                  .filter((acc) => !snapshotAccessoriesIds.includes(acc.context.id))
-              
-              let cachedIds = cachedAccessories.map((acc) => acc.context.id)
+                  .filter((acc) => !snapshotAccessories.some((snap_acc) => snap_acc.context.id === acc.context.id))
+              //Remove accessories that are handled differently
+              let changedAccessories = cachedAccessories
+                  .filter((acc) => snapshotAccessories.some((snap_acc) => snap_acc.context.id === acc.context.id && snap_acc.context.deviceClassName !== acc.context.deviceClassName))
+              let removedAndChangedAccessories = removedAccessories.concat(changedAccessories)
+              log.info(`Removing ${removedAndChangedAccessories.length} accessories`)
+              api.unregisterPlatformAccessories(PluginName, PlatformName, removedAndChangedAccessories)
+
+              //Adding new accessories
               let newAccessories = snapshotAccessories
-                  .filter((acc) => !cachedIds.includes(acc.context.id))
-    
-              log.info("Removing " + removedAccessories.length + " stale accessories")
-              removedAccessories.forEach((acc) => log.debug(acc.context))
-    
-              log.info("Adding " + newAccessories.length + " new accessories")
-              newAccessories.forEach((acc) => log.debug(acc.context))
-    
-              api.unregisterPlatformAccessories(PluginName, PlatformName, removedAccessories)
+                  .filter((acc) => !cachedAccessories.some((cached_acc) => cached_acc.context.id === acc.context.id) || changedAccessories.some((changed_acc) => changed_acc.context.id === acc.context.id))
+              log.info(`Adding ${newAccessories.length} accessories`)
               api.registerPlatformAccessories(PluginName, PlatformName, newAccessories)
     
               cachedAccessories = cachedAccessories.filter((el) => !removedAccessories.includes(el));
@@ -96,26 +110,11 @@ module.exports = function (homebridge) {
             }
           ).catch((error) => {
             log.error("Error while bootstrapping accessories:", error)
-            this.setCatastrophe()
+            Promise.all(this.cachedAccessories).then(setCatastrophe)
           })
 
       api.on('didFinishLaunching', () => { 
         return this.initialLoad
-      })
-    }
-
-    setCatastrophe() {
-      this.cachedAccessories
-      .forEach((accessory) => {
-        accessory.services
-        .filter((service) => service.UUID != Service.AccessoryInformation)
-        .forEach((service) => {
-          service.characteristics.forEach((characteristic) => {
-            characteristic.on('get', (callback) => {
-              callback(new Error("Platform failed to initialize"))
-            })
-          })
-        })
       })
     }
 
