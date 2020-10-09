@@ -1,3 +1,15 @@
+#### 1.1.0 (2020-10-09)
+
+### Changes
+
+- Add support for new sensors
+- Add Smoke Sensor and Carbon Monoxide device handling
+- Add Tamper monitoring for sensors
+
+### Bug Fixes
+- Fix error handling
+- Fix error if panel device is ignored
+
 #### 1.0.1 (2020-09-10)
 
 ### Bug Fixes
