@@ -1,3 +1,9 @@
+#### 1.2.1 (2020-10-13)
+
+### Bug Fixes
+
+- Fix startup issues
+
 #### 1.2.0 (2020-10-12)
 
 ### Changes
