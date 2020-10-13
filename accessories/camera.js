@@ -25,7 +25,8 @@ class Camera extends Device {
           name: data.Name,
           manufacturer: informationService.getCharacteristic(this.Characteristic.Manufacturer).value,
           model: informationService.getCharacteristic(this.Characteristic.Model).value,
-          motion: true
+          motion: true,
+          motionTimeout: 1
         }
 
         if (data.Name.toLowerCase().indexOf('doorbell') > -1) {
