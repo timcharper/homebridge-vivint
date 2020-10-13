@@ -1,3 +1,9 @@
+#### 1.2.2 (2020-10-13)
+
+### Bug Fixes
+
+- Fix thermostat handling
+
 #### 1.2.1 (2020-10-13)
 
 ### Bug Fixes
