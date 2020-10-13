@@ -70,8 +70,16 @@ module.exports = function (homebridge) {
               api.registerPlatformAccessories(PluginName, PlatformName, newAccessories)
     
               cachedAccessories = cachedAccessories.filter((el) => !removedAccessories.includes(el));
-              cachedAccessories.forEach((accessory) => deviceSet.bindAccessory(accessory))
-              newAccessories.forEach((accessory) => deviceSet.bindAccessory(accessory))
+
+              cachedAccessories.forEach((accessory) => { 
+                let data = snapshotDevices.find((snap_device) => snap_device.Id === accessory.context.id)
+                deviceSet.bindAccessory(accessory, data) 
+              })
+
+              newAccessories.forEach((accessory) => { 
+                let data = snapshotDevices.find((snap_device) => snap_device.Id === accessory.context.id)
+                deviceSet.bindAccessory(accessory, data) 
+              })
     
               pubNub.addListener({
                 status: function(statusEvent) {
@@ -88,7 +96,7 @@ module.exports = function (homebridge) {
                   }
                 },
                 message: function(msg) {
-                  log.debug("Parsed PubNub message:", JSON.stringify(vivintApi.parsePubNub(msg.message)))
+                  log.debug("Parsed PubNub message:", JSON.stringify(vivintApi.parsePubNub(msg.message), undefined, 4))
                   deviceSet.handleMessage(vivintApi.parsePubNub(msg.message))
                 }
               })

@@ -51,12 +51,15 @@ Currently, the following items are supported:
 * Motion sensors
 * Garage Door Opener
 * Alarm Panel (arm home/away, disarm)
-* PIV Motion Detectors (Each Vivint camera doubles as a motion detector - PIV meaning 'person in view')
-  * [homebridge-camera-ffmpeg](https://github.com/Sunoo/homebridge-camera-ffmpeg) plugin is required to display video from cameras in HomeKit. **showCameraConfig** config flag can be used to generate config for each detected camera. Copy each config from the log into the "cameras" section of the [homebridge-camera-ffmpeg](https://github.com/Sunoo/homebridge-camera-ffmpeg) plugin configuration for cameras to appear in HomeKit.
+* Cameras & Doorbells (Each Vivint camera is handled as a motion detector - PIV meaning 'person in view')
+  * [homebridge-camera-ffmpeg](https://github.com/Sunoo/homebridge-camera-ffmpeg) plugin is required to display video in HomeKit. 
+  * **showCameraConfig** config flag can be used to generate config for each detected camera. Copy each config from the log into the "cameras" section of the [homebridge-camera-ffmpeg](https://github.com/Sunoo/homebridge-camera-ffmpeg) plugin configuration for cameras to appear in HomeKit.
+  * **cameraAutomationHttpPort** config value is used to enable HTTP calls to [homebridge-camera-ffmpeg](https://github.com/Sunoo/homebridge-camera-ffmpeg) for motion and doorbell notifications. Please make sure same port is configured on [homebridge-camera-ffmpeg](https://github.com/Sunoo/homebridge-camera-ffmpeg) side. [Read more](https://sunoo.github.io/homebridge-camera-ffmpeg/automation/http.html)"
 * Tilt sensors
 * Fire alert sensors
 * Glass break sensors
-* CO / Smoke detectors
+* Smoke detectors
+* Carbon monoxide sensors
 * Heat / Freeze sensors
 * Z-Wave switches (binary and dimmer) that are paired with the Vivint panel. Be sure they are labeled "light" or "fan" if they control those respective devices.
 
@@ -72,7 +75,6 @@ Configuration sample:
       "platform": "Vivint",
       "username": "your-vivint-user@email.com",
       "password": "vivint-user-password",
-      "apiLoginRefreshSecs": 1200,
       "ignoreDeviceTypes": ["thermostat_device", "garage_door_device"],
       "showCameraConfig": true
     }
