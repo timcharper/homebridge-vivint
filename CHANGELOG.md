@@ -1,3 +1,11 @@
+#### 1.2.0 (2020-10-12)
+
+### Changes
+
+- Add Doorbell button press detection 
+- Add "Motion detected" event handlihg for cameras
+    - Requires [homebridge-camera-ffmpeg](https://github.com/Sunoo/homebridge-camera-ffmpeg) HTTP automation set up. Make sure to specify HTTP port configured on [homebridge-camera-ffmpeg](https://github.com/Sunoo/homebridge-camera-ffmpeg) side in **cameraAutomationHttpPort** config parameter
+
 #### 1.1.0 (2020-10-09)
 
 ### Changes

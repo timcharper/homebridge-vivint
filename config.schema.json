@@ -45,6 +45,11 @@
           "title": "Show camera config",
           "description": "Shows [homebridge-camera-ffmpeg](https://github.com/Sunoo/homebridge-camera-ffmpeg) configuration for all detected cameras in the log",
           "type": "boolean"
+        },
+        "cameraAutomationHttpPort": {
+          "type": "integer",
+          "title": "Camera Automation HTTP port",
+          "description": "HTTP port used for [homebridge-camera-ffmpeg](https://github.com/Sunoo/homebridge-camera-ffmpeg) automations. [Read more](https://sunoo.github.io/homebridge-camera-ffmpeg/automation/http.html)"
         }
       }
     },
