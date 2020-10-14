@@ -6,9 +6,11 @@
 
 This is a fork of [homebridge-vivint](https://github.com/timcharper/homebridge-vivint) plugin for [homebridge](https://github.com/nfarina/homebridge).
 It allows to use your Vivint SmartHome products in Apple Homekit. The main changes in this fork include:
+  * More devices are supported
   * Increased stability of notifications
   * Support for camera configuration info export to use with [homebridge-camera-ffmpeg](https://github.com/Sunoo/homebridge-camera-ffmpeg) plugin
-  * Ignore list for specific device types managed by Vivint (useful in case of external integrations like Nest or MyQ that may be managed directly by another plugin) 
+  * Support for [homebridge-camera-ffmpeg](https://github.com/Sunoo/homebridge-camera-ffmpeg) HTTP automation calls 
+  * Ignore list for specific device types (useful in case of external integrations like Nest or MyQ that may be managed directly by another plugin) 
   * Dynamic accessory cache management - any accessories that are no longer managed by the plugin or are disconnected from Vivint system would be removed from the cache automatically
   * Homebridge Config UI X Web UI settings support
 
