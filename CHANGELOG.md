@@ -1,34 +1,44 @@
+#### 1.3.0 (2020-10-14)
+
+### Changes
+
+- Added support for new contact and glass break sensors
+
+##### Other Changes
+
+- More accurate Serial number assignment (important for Home Assistant integrations)
+
 #### 1.2.2 (2020-10-13)
 
 ### Bug Fixes
 
-- Fix thermostat handling
+- Fixed thermostat handling
 
 #### 1.2.1 (2020-10-13)
 
 ### Bug Fixes
 
-- Fix startup issues
+- Fixed startup issues
 
 #### 1.2.0 (2020-10-12)
 
 ### Changes
 
-- Add Doorbell button press detection 
-- Add "Motion detected" event handlihg for cameras
+- Added Doorbell button press detection 
+- Added "Motion detected" event handlihg for cameras
     - Requires [homebridge-camera-ffmpeg](https://github.com/Sunoo/homebridge-camera-ffmpeg) HTTP automation set up. Make sure to specify HTTP port configured on [homebridge-camera-ffmpeg](https://github.com/Sunoo/homebridge-camera-ffmpeg) side in **cameraAutomationHttpPort** config parameter
 
 #### 1.1.0 (2020-10-09)
 
 ### Changes
 
-- Add support for new sensors
-- Add Smoke Sensor and Carbon Monoxide device handling
-- Add Tamper monitoring for sensors
+- Added support for new sensors
+- Added Smoke Sensor and Carbon Monoxide device handling
+- Added Tamper monitoring for sensors
 
 ### Bug Fixes
-- Fix error handling
-- Fix error if panel device is ignored
+- Fixed error handling
+- Fixed error if panel device is ignored
 
 #### 1.0.1 (2020-09-10)
 
@@ -40,7 +50,7 @@
 
 ### Changes
 
-- Add support for new devices:
+- Added support for new devices:
     - CO detector
     - Smoke detector
     - Heat / Freeze sensors
@@ -74,7 +84,7 @@
 
 ### Changes
 
-- Add support for new devices:
+- Added support for new devices:
     - Glass Break
     - Fire Alert
     - Tilt sensor
