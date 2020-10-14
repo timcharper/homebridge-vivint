@@ -49,7 +49,7 @@
         "cameraAutomationHttpPort": {
           "type": "integer",
           "title": "Camera Automation HTTP port",
-          "description": "HTTP port used for [homebridge-camera-ffmpeg](https://github.com/Sunoo/homebridge-camera-ffmpeg) automations. [Read more](https://sunoo.github.io/homebridge-camera-ffmpeg/automation/http.html)"
+          "description": "HTTP port used for [homebridge-camera-ffmpeg](https://github.com/Sunoo/homebridge-camera-ffmpeg) automations"
         }
       }
     },
