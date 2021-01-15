@@ -1,3 +1,7 @@
+## 1.4.0 (2021-01-14)
+### Bug Fixes
+- Fixed Thermostat handling
+
 ## 1.3.0 (2020-10-14)
 ### Changes
 - Added support for new contact and glass break sensors
