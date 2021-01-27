@@ -1,3 +1,7 @@
+## 1.4.1 (2021-01-26)
+### Bug Fixes
+- Fixed error on old NodeJS versions
+
 ## 1.4.0 (2021-01-14)
 ### Bug Fixes
 - Fixed Thermostat handling
