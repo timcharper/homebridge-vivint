@@ -1,3 +1,8 @@
+## 1.4.2 (2021-02-07)
+### Bug Fixes
+- Fixed bug with too many doorbell notifications
+- Fixed bug with panel when updated to Homebridge 1.3.0
+
 ## 1.4.1 (2021-01-26)
 ### Bug Fixes
 - Fixed error on old NodeJS versions
