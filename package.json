@@ -22,14 +22,14 @@
     "homebridge": ">=1.0.0"
   },
   "dependencies": {
-    "debounce-promise": "^3.1.0",
-    "isobject": "^3.0.1",
-    "pubnub": "^4.21.2",
-    "request": "^2.87.0",
-    "request-promise-native": "^1.0.5",
+    "debounce-promise": "^3.1.2",
     "ffmpeg-for-homebridge": "^0.0.5",
+    "get-port": "^5.1.1",
+    "isobject": "^3.0.1",
     "jpeg-extract": "^3.0.1",
-    "get-port": "^5.1.1"
+    "pubnub": "^4.29.11",
+    "request": "^2.88.2",
+    "request-promise-native": "^1.0.9"
   },
   "devDependencies": {
     "mocha": "^5.2.0"
