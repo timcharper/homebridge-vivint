@@ -1,3 +1,7 @@
+## 1.4.3 (2021-02-21)
+### Bug Fixes
+- Fixed bug with locks when updated to Homebridge 1.3.0
+
 ## 1.4.2 (2021-02-07)
 ### Bug Fixes
 - Fixed bug with too many doorbell notifications
