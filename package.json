@@ -23,7 +23,7 @@
   },
   "dependencies": {
     "debounce-promise": "^3.1.2",
-    "ffmpeg-for-homebridge": "^0.0.5",
+    "ffmpeg-for-homebridge": "^0.0.9",
     "get-port": "^5.1.1",
     "isobject": "^3.0.1",
     "jpeg-extract": "^3.0.1",

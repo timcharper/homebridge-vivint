@@ -1,3 +1,7 @@
+## 1.5.0 (2021-02-23)
+### Changes
+- Added native support for cameras and doorbells, no external plugin required
+
 ## 1.4.3 (2021-02-21)
 ### Bug Fixes
 - Fixed bug with locks when updated to Homebridge 1.3.0
