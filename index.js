@@ -129,7 +129,6 @@ module.exports = function (homebridge) {
     }
 
     configureAccessory(accessory) {
-      this.log.debug("Received cached accessory:", JSON.stringify(accessory, undefined, 4))
       this.cachedAccessories.push(accessory)
     }
   }
