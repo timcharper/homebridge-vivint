@@ -1,3 +1,7 @@
+## 1.5.3 (2021-03-11)
+### Changes
+- Added the option to switch video feeds to stream from Vivint servers
+
 ## 1.5.1 (2021-03-10)
 ### Bug Fixes
 - Fixed handling cameras with no audio feed

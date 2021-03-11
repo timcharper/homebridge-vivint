@@ -93,3 +93,4 @@ Configuration options overview:
 * **motionDetectedOccupancySensorMins** - Homebridge-Vivint will create occupancy sensors for motion sensors that will stay active for X minutes after a motion event is detected. This value configures for how long that occupancy sensor will stay active if no further motion events are detected. Note: Vivint's reporting of motion events over the event stream can be a little inconsistent, at times. As a recommendation, don't plan on creating Homekit automations that respond to Vivint motion events.
 * **ignoreDeviceTypes** - The array containing the device types that should be ignored. Allowed types: "thermostat_device", "door_lock_device", "garage_door_device", "camera_device", "wireless_sensor"
 * **disableCameras** - If checked, camera video feeds would not appear in Homebridge.
+* **useExternalVideoStreams** - Stream camera feeds from Vivint servers instead of streaming directly from the Panel.
