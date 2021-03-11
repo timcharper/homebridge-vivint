@@ -1,3 +1,10 @@
+## 1.5.1 (2021-03-10)
+### Bug Fixes
+- Fixed handling cameras with no audio feed
+- Improved video loading speed
+- Switched to the direct snapshot retrieval
+- Remove cameras from the system completely after disableCameras flag was enabled
+
 ## 1.5.0 (2021-02-23)
 ### Changes
 - Added native support for cameras and doorbells, no external plugin required

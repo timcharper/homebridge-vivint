@@ -47,6 +47,8 @@ module.exports = function (homebridge) {
               let DeviceSet = DeviceSetModule(config, log, homebridge, vivintApi)
               let deviceSet = new DeviceSet()
 
+              this.log.debug(JSON.stringify(vivintApi.deviceSnapshot(), undefined, 4))
+
               let snapshotDevices = vivintApi.deviceSnapshot().Devices
               let snapshotAccessories = snapshotDevices
                   .filter((data) => data.Id)
@@ -56,9 +58,9 @@ module.exports = function (homebridge) {
               //Remove stale/ignored accessories                  
               let removedAccessories = cachedAccessories
                   .filter((acc) => !snapshotAccessories.some((snap_acc) => snap_acc.context.id === acc.context.id))
-              //Remove accessories that are handled differently
+              //Remove accessories that are handled differently (and previously enabled cameras if disabled now)
               let changedAccessories = cachedAccessories
-                  .filter((acc) => snapshotAccessories.some((snap_acc) => snap_acc.context.id === acc.context.id && snap_acc.context.deviceClassName !== acc.context.deviceClassName))
+                  .filter((acc) => snapshotAccessories.some((snap_acc) => snap_acc.context.id === acc.context.id && snap_acc.context.deviceClassName !== acc.context.deviceClassName || config.disableCameras && acc.getService(Service.CameraRTPStreamManagement)))
               let removedAndChangedAccessories = removedAccessories.concat(changedAccessories)
               log.info(`Removing ${removedAndChangedAccessories.length} accessories`)
               api.unregisterPlatformAccessories(PluginName, PlatformName, removedAndChangedAccessories)
@@ -127,7 +129,7 @@ module.exports = function (homebridge) {
     }
 
     configureAccessory(accessory) {
-      this.log.debug("Received cached accessory:", accessory)
+      this.log.debug("Received cached accessory:", JSON.stringify(accessory, undefined, 4))
       this.cachedAccessories.push(accessory)
     }
   }
