@@ -1,6 +1,6 @@
 {
   "name": "@jgrimard/homebridge-vivint-mfa-test",
-  "version": "1.5.8",
+  "version": "1.5.7",
   "description": "Control Vivint with HomeBridge - for testing only",
   "license": "ISC",
   "author": "Alexandr Balan <balansse@gmail.com>",
