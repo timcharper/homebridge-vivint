@@ -1,22 +1,21 @@
 {
-  "name": "@jgrimard/homebridge-vivint-mfa-test",
-  "version": "1.5.6",
-  "description": "Control Vivint with HomeBridge - for testing only",
+  "name": "@balansse/homebridge-vivint",
+  "version": "1.5.4",
+  "description": "Control Vivint with HomeBridge",
   "license": "ISC",
   "author": "Alexandr Balan <balansse@gmail.com>",
   "contributors": [
-    "Tim Harper <timcharper@gmail.com>",
-    "Jason Grimard"
+    "Tim Harper <timcharper@gmail.com>"
   ],
   "keywords": [
     "homebridge-plugin"
   ],
   "repository": {
     "type": "git",
-    "url": "git://github.com/jgrimard/homebridge-vivint.git"
+    "url": "git://github.com/balansse/homebridge-vivint.git"
   },
   "bugs": {
-    "url": "http://github.com/jgrimard/homebridge-vivint/issues"
+    "url": "http://github.com/balansse/homebridge-vivint/issues"
   },
   "engines": {
     "node": ">=10",
@@ -36,7 +35,7 @@
   "devDependencies": {
     "mocha": "^5.2.0"
   },
-  "homepage": "https://github.com/jgrimard/homebridge-vivint#readme",
+  "homepage": "https://github.com/balansse/homebridge-vivint#readme",
   "funding": [
     {
       "type": "kofi",
