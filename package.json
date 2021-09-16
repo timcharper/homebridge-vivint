@@ -22,6 +22,7 @@
     "homebridge": ">=1.0.0"
   },
   "dependencies": {
+    "@homebridge/plugin-ui-utils": "0.0.19",
     "debounce-promise": "^3.1.2",
     "ffmpeg-for-homebridge": "^0.0.9",
     "get-port": "^5.1.1",
