@@ -1,12 +1,12 @@
 {
   "name": "@jgrimard/homebridge-vivint-mfa-test",
-  "version": "1.5.6",
+  "version": "2.5.5",
   "description": "Control Vivint with HomeBridge - for testing only",
   "license": "ISC",
   "author": "Alexandr Balan <balansse@gmail.com>",
   "contributors": [
     "Tim Harper <timcharper@gmail.com>",
-    "Jason Grimard"
+    "jgrimard"
   ],
   "keywords": [
     "homebridge-plugin"
@@ -53,6 +53,7 @@
     "test": "test"
   },
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "build": "npm run --prefix lib\\homebridge-ui build && build\\package-homebridge-vivint.bat"
   }
 }

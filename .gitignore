@@ -2,3 +2,4 @@ node_modules
 persist/
 *.tgz
 scratch
+release-homebridge-vivint
