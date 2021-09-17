@@ -5,17 +5,18 @@
   "license": "ISC",
   "author": "Alexandr Balan <balansse@gmail.com>",
   "contributors": [
-    "Tim Harper <timcharper@gmail.com>"
+    "Tim Harper <timcharper@gmail.com>",
+    "jgrimard"
   ],
   "keywords": [
     "homebridge-plugin"
   ],
   "repository": {
     "type": "git",
-    "url": "git://github.com/jgrimard/homebridge-vivint.git"
+    "url": "git://github.com/@balansse/homebridge-vivint.git"
   },
   "bugs": {
-    "url": "http://github.com/jgrimard/homebridge-vivint/issues"
+    "url": "http://github.com/@balansse/homebridge-vivint/issues"
   },
   "engines": {
     "node": ">=10",
@@ -35,7 +36,7 @@
   "devDependencies": {
     "mocha": "^5.2.0"
   },
-  "homepage": "https://github.com/jgrimard/homebridge-vivint#readme",
+  "homepage": "https://github.com/@balansse/homebridge-vivint#readme",
   "funding": [
     {
       "type": "kofi",
