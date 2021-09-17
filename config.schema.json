@@ -1,5 +1,5 @@
 {
-    "pluginAlias": "Vivint-Test",
+    "pluginAlias": "Vivint",
     "pluginType": "platform",
     "singular": true,
     "customUi": true,

@@ -1,7 +1,7 @@
 var Accessory, Service, Characteristic, UUIDGen;
 
 const PluginName = "homebridge-vivint"
-const PlatformName = "Vivint-Test"
+const PlatformName = "Vivint"
 const VivintApiModule = require("./lib/vivint_api.js")
 const DeviceSetModule = require("./lib/device_set.js")
 

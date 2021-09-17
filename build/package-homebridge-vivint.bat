@@ -1,3 +1,9 @@
+PUSHD ..
+call npm install
+PUSHD lib\homebridge-ui
+call npm install
+call npm run build
+POPD
 rmdir /S /Q release-homebridge-vivint
 mkdir release-homebridge-vivint\lib
 robocopy lib release-homebridge-vivint\lib /E /XD homebridge-ui
@@ -15,8 +21,9 @@ copy vivint_mfa_cli.js release-homebridge-vivint
 robocopy lib\homebridge-ui\build release-homebridge-vivint\lib\homebridge-ui\public /E /MOVE
 copy lib\homebridge-ui\LICENSE release-homebridge-vivint\lib\homebridge-ui
 copy lib\homebridge-ui\server.js release-homebridge-vivint\lib\homebridge-ui
+POPD
 @ECHO .
 @ECHO If the build succeeded you can publish to NPM by running the following commands:
-@ECHO cd release-homebridge-vivint
+@ECHO cd ..\release-homebridge-vivint
 @ECHO npm publish
 @ECHO .

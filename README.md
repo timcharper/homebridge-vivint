@@ -96,3 +96,8 @@ Configuration options overview:
 * **ignoreDeviceTypes** - The array containing the device types that should be ignored. Allowed types: "thermostat_device", "door_lock_device", "garage_door_device", "camera_device", "wireless_sensor"
 * **disableCameras** - If checked, camera video feeds would not appear in Homebridge.
 * **useExternalVideoStreams** - Stream camera feeds from Vivint servers instead of streaming directly from the Panel.
+
+## Credits
+
+ * @daymondm - https://github.com/daymondm/homebridge-vivint - The original creator of the homebridge-vivint plugin
+ * @dgreif - https://github.com/dgreif/ring - The base for vivint-homebridge custom UI for entering login and MFA codes.
