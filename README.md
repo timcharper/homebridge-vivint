@@ -39,7 +39,7 @@ npm install -g @balansse/homebridge-vivint
 
 Then, add the following configuration to the `platforms` array in your Homebridge `config.json`.
 
-If needed, you can manually generate a refresh token by running vivint_mfa_cli.js in the command line.
+If needed, you can manually generate a refresh token by running `npm run mfa` in the command line.
 
 
 ```
