@@ -1,4 +1,4 @@
-## 1.5.5 (2021-09-17)
+## 1.6.0 (2021-09-19)
 ### Changes
 - Added support for Multi Factor Authentication
 
