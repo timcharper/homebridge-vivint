@@ -3,3 +3,4 @@ accessories/
 persist/
 *.tgz
 scratch/
+lib/homebridge-ui

@@ -3,7 +3,7 @@
     "pluginType": "platform",
     "singular": true,
     "customUi": true,
-    "customUiPath": "./lib/homebridge-ui",
+    "customUiPath": "./dist/homebridge-ui",
     "schema": {
       "type": "object",
       "properties": {
