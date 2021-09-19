@@ -6,7 +6,8 @@
   "author": "Alexandr Balan <balansse@gmail.com>",
   "contributors": [
     "Tim Harper <timcharper@gmail.com>",
-    "jgrimard"
+    "jgrimard",
+    "arjunmehta"
   ],
   "keywords": [
     "homebridge-plugin"
