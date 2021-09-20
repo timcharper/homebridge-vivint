@@ -2,3 +2,5 @@ node_modules
 persist/
 *.tgz
 scratch
+dist
+build

@@ -1,3 +1,7 @@
+## 1.6.0 (2021-09-19)
+### Changes
+- Added support for Multi Factor Authentication
+
 ## 1.5.4 (2021-03-21)
 ### Bug Fixes
 - Fix for the camera snapshot / streaming issue

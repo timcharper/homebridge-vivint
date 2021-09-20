@@ -13,6 +13,7 @@
 
 This is a fork of [homebridge-vivint](https://github.com/timcharper/homebridge-vivint) plugin for [homebridge](https://github.com/nfarina/homebridge).
 It allows to use your Vivint SmartHome products in Apple Homekit. The main changes in this fork include:
+  * Support to Multi Factor Authentication
   * More devices are supported
   * Increased stability of notifications
   * Support for camera streaming
@@ -26,6 +27,8 @@ Homebridge-Vivint was initially written by a former Vivint employee, Tim Harper.
 
 This plugin supports installation and changing settings (for `config.js`) via the popular [Config UI X plugin](https://github.com/oznu/homebridge-config-ui-x) (recommended for easiest usage).
 
+After entering your name and password (and possibly a MFA code) in the Plugin Settings a Vivint Refresh Token will be automatically poplulated.  Click Save then Restart Homebridge to connect.
+
 Ensure you are running Node v10.17.0 or higher (this version is required by Homebridge v1.0.0). You can check by using `node -v`.
 
 Either install and configure using Config UI X or you can manually install the plugin by running:
@@ -36,13 +39,14 @@ npm install -g @balansse/homebridge-vivint
 
 Then, add the following configuration to the `platforms` array in your Homebridge `config.json`.
 
+If needed, you can manually generate a refresh token by running `npm run mfa` in the command line.
+
 
 ```
 {
     {
       "platform": "Vivint",
-      "username": "your-vivint-user@email.com",
-      "password": "vivint-user-password"
+      "refreshToken": "your-vivint-refresh-token"
     }
 }
 ```
@@ -78,8 +82,7 @@ Configuration sample:
 
     {
       "platform": "Vivint",
-      "username": "your-vivint-user@email.com",
-      "password": "vivint-user-password",
+      "refreshToken": "your-vivint-refresh-token",
       "ignoreDeviceTypes": ["thermostat_device", "garage_door_device"]
     }
 
@@ -87,10 +90,14 @@ A general recommendation: consider creating and using a new Vivint account named
 
 Configuration options overview:
 
-* **username**
-* **password**
+* **refreshToken** - Your Vivint refresh token.  This will be generated after entering your Vivint user name and password in the Config UI X plugin.
 * **apiLoginRefreshSecs** - How often should Vivint Homebridge renew the session token? The token that Vivint provides when authenticating will expire. Also, when this renewal occurs, the plugin requests another snapshot. The event stream can sometimes fail to report device state appropriately and events can come out of order with the snapshot, or updates can be missed entirely. The occasional snapshot retrieval will auto-correct any such errors. Avoid setting this any more frequent that 10 minutes.
 * **motionDetectedOccupancySensorMins** - Homebridge-Vivint will create occupancy sensors for motion sensors that will stay active for X minutes after a motion event is detected. This value configures for how long that occupancy sensor will stay active if no further motion events are detected. Note: Vivint's reporting of motion events over the event stream can be a little inconsistent, at times. As a recommendation, don't plan on creating Homekit automations that respond to Vivint motion events.
 * **ignoreDeviceTypes** - The array containing the device types that should be ignored. Allowed types: "thermostat_device", "door_lock_device", "garage_door_device", "camera_device", "wireless_sensor"
 * **disableCameras** - If checked, camera video feeds would not appear in Homebridge.
 * **useExternalVideoStreams** - Stream camera feeds from Vivint servers instead of streaming directly from the Panel.
+
+## Credits
+
+ * @daymondm - https://github.com/daymondm/homebridge-vivint - The original creator of the homebridge-vivint plugin
+ * @dgreif - https://github.com/dgreif/ring - The base for vivint-homebridge custom UI for entering login and MFA codes.

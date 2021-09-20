@@ -2,19 +2,14 @@
     "pluginAlias": "Vivint",
     "pluginType": "platform",
     "singular": true,
+    "customUi": true,
+    "customUiPath": "./dist/homebridge-ui",
     "schema": {
       "type": "object",
       "properties": {
-        "username": {
+        "refreshToken": {
             "type": "string",
-            "title": "Vivint username",
-            "format": "email",
-            "default": "",
-            "required": true
-        },
-        "password": {
-            "type": "string",
-            "title": "Vivint password",
+            "title": "Vivint Refresh Token",
             "default": "",
             "required": true
         },
