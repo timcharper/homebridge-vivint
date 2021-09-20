@@ -99,5 +99,5 @@ Configuration options overview:
 
 ## Credits
 
- * @daymondm - https://github.com/daymondm/homebridge-vivint - The original creator of the homebridge-vivint plugin
+ * @timcharper - https://github.com/timcharper/homebridge-vivint - The original creator of the homebridge-vivint plugin
  * @dgreif - https://github.com/dgreif/ring - The base for vivint-homebridge custom UI for entering login and MFA codes.
