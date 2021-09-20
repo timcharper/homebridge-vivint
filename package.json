@@ -15,10 +15,10 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git://github.com/@balansse/homebridge-vivint.git"
+    "url": "git://github.com/balansse/homebridge-vivint.git"
   },
   "bugs": {
-    "url": "http://github.com/@balansse/homebridge-vivint/issues"
+    "url": "http://github.com/balansse/homebridge-vivint/issues"
   },
   "engines": {
     "node": ">=10",
@@ -39,7 +39,7 @@
     "fs-extra": "^10.0.0",
     "mocha": "^5.2.0"
   },
-  "homepage": "https://github.com/@balansse/homebridge-vivint#readme",
+  "homepage": "https://github.com/balansse/homebridge-vivint#readme",
   "funding": [
     {
       "type": "kofi",
