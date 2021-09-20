@@ -1,6 +1,7 @@
 ## 1.6.0 (2021-09-19)
 ### Changes
-- Added support for Multi Factor Authentication
+- Added support for Multi Factor Authentication (thanks to @jgerimard and @arjunmehta)
+    - If upgrading from previous versions, please go to the settings page of the plugin to reconfigure the authentication.
 
 ## 1.5.4 (2021-03-21)
 ### Bug Fixes
