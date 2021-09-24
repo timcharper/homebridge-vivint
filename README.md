@@ -27,7 +27,7 @@ Homebridge-Vivint was initially written by a former Vivint employee, Tim Harper.
 
 This plugin supports installation and changing settings (for `config.js`) via the popular [Config UI X plugin](https://github.com/oznu/homebridge-config-ui-x) (recommended for easiest usage).
 
-After entering your name and password (and possibly a MFA code) in the Plugin Settings a Vivint Refresh Token will be automatically poplulated.  Click Save then Restart Homebridge to connect.
+After entering your name and password (and possibly a MFA code) in the Plugin Settings a Vivint Refresh Token will be automatically poplulated.  Depending on your Vivint user settings, your MFA code may come from your authenticator app or it will be sent to you via SMS or email.  When done, click Save then Restart Homebridge to connect.
 
 Ensure you are running Node v10.17.0 or higher (this version is required by Homebridge v1.0.0). You can check by using `node -v`.
 
@@ -41,7 +41,6 @@ Then, add the following configuration to the `platforms` array in your Homebridg
 
 If needed, you can manually generate a refresh token by running `npm run mfa` in the command line.
 
-
 ```
 {
     {
@@ -52,6 +51,17 @@ If needed, you can manually generate a refresh token by running `npm run mfa` in
 ```
 
 That's it! The plugin will automatically load all supported Vivint devices into Homebridge.
+
+### HOOBS Users:
+
+Unfortunately HOOBS doesn't support the Custom UI components created for Homebridge.
+
+As a workaround, you can open a terminal in HOOBS and run the following commands, where "vivintbridge" is the name of the bridge but all lowercase and with no spaces:
+
+```
+cd /var/lib/hoobs/vivintbridge/node_modules/@balansse/homebridge-vivint
+npm run mfa
+```
 
 ## Supported Items
 
