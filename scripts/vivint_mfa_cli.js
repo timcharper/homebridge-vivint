@@ -56,7 +56,7 @@ const run = async () => {
   }
   //if response was error 401, we are going to ask user to type in the MFA code they received.
   if (isMfa) {
-    const code = await askQuestion("Please enter the MFA code you received via sms or email : ");
+    const code = await askQuestion("Please enter the MFA code from your authenticator app or the one you received via sms or email : ");
     try {
       response = await request({
         method: "POST",
