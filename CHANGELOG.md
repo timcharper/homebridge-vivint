@@ -1,3 +1,7 @@
+## 1.6.1 (2022-05-03)
+### Bug fixes
+- Fixed handling Dimmer switches
+- Fixed event subscription
 ## 1.6.0 (2021-09-19)
 ### Changes
 - Added support for Multi Factor Authentication (thanks to @jgrimard and @arjunmehta)
