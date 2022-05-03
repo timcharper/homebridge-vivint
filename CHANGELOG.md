@@ -1,6 +1,6 @@
 ## 1.6.1 (2022-05-03)
 ### Bug fixes
-- Fixed handling Dimmer switches
+- Fixed handling Dimmer switches (thanks to @mikedecaro)
 - Fixed event subscription
 ## 1.6.0 (2021-09-19)
 ### Changes
