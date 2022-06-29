@@ -1,7 +1,19 @@
+## 1.7.0 (2022-06-29)
+### Changes
+- Add support for fan rotation speed (thanks to @mikedecaro)
+- Add support for water sensor (#67)
+- Add lowBatteryLevel override to config (#52)
+    - Use lowBatteryLevel key in config to configure, if not defined plugin will use default Vivint flag
+- 
+### Bug fixes
+- Fixed empty name preventing devices from being added (#41) (#65)
+- Fixed Garage Door handling (#35) (#30)
+- Fixed for handling missing device info (#25) (#56) (#62)
 ## 1.6.1 (2022-05-03)
 ### Bug fixes
 - Fixed handling Dimmer switches (thanks to @mikedecaro)
 - Fixed event subscription
+
 ## 1.6.0 (2021-09-19)
 ### Changes
 - Added support for Multi Factor Authentication (thanks to @jgrimard and @arjunmehta)
