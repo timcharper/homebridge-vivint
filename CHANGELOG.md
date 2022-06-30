@@ -4,11 +4,12 @@
 - Add support for water sensor (#67)
 - Add lowBatteryLevel override to config (#52)
     - Use lowBatteryLevel key in config to configure, if not defined plugin will use default Vivint flag
-- 
+    
 ### Bug fixes
 - Fixed empty name preventing devices from being added (#41) (#65)
 - Fixed Garage Door handling (#35) (#30)
 - Fixed for handling missing device info (#25) (#56) (#62)
+
 ## 1.6.1 (2022-05-03)
 ### Bug fixes
 - Fixed handling Dimmer switches (thanks to @mikedecaro)
