@@ -32,7 +32,8 @@
                 "door_lock_device",
                 "garage_door_device",
                 "camera_device",
-                "wireless_sensor"
+                "wireless_sensor",
+                "phillips_hue_bridge_device"
               ]
             }
         },
