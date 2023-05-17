@@ -60,7 +60,7 @@ module.exports = function (homebridge) {
                   .filter((acc) => !snapshotAccessories.some((snap_acc) => snap_acc.context.id === acc.context.id))
               //Remove accessories that are handled differently (and previously enabled cameras if disabled now)
               let changedAccessories = cachedAccessories
-                  .filter((acc) => snapshotAccessories.some((snap_acc) => snap_acc.context.id === acc.context.id && snap_acc.context.deviceClassName !== acc.context.deviceClassName || config.disableCameras && acc.getService(Service.CameraRTPStreamManagement)))
+                  .filter((acc) => snapshotAccessories.some((snap_acc) => snap_acc.context.id === acc.context.id && snap_acc.context.deviceClassName !== acc.context.deviceClassName || config.disableCameras && acc.getService(Service.CameraRTPStreamManagement) || snap_acc.context.id === acc.context.id && snap_acc.services.length !== acc.services.length))
               let removedAndChangedAccessories = removedAccessories.concat(changedAccessories)
               log.info(`Removing ${removedAndChangedAccessories.length} accessories`)
               api.unregisterPlatformAccessories(PluginName, PlatformName, removedAndChangedAccessories)
