@@ -36,6 +36,11 @@
               ]
             }
         },
+        "logDeviceList": {
+          "title": "Show device list",
+          "description": "Shows data for all configured Vivint devices in the log",
+          "type": "boolean"
+        },
         "disableCameras": {
           "title": "Disable cameras",
           "description": "If checked, camera video feeds would not appear in Homebridge.",

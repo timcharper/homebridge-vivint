@@ -6,7 +6,6 @@
 - Added the ability to ignore individual devices based on their ID or equipment code (#110).
     - To use this feature, add the [] key to the config to show all configured Vivint device data in the log. Then, add the IDs or Equipment Codes of devices to hide to the ignore list.
 - Added back the ability to generate ffmpeg configs for all cameras in the log using the showCameraConfig flag (#77)
-
 ### Bug fixes
 - Fixed double notification from doorbell button press
 
