@@ -20,14 +20,15 @@
             "default": 1200
         },
         "ignoreDeviceTypes": {
-            "title": "Ignored Device Types",
-            "description": "Selected device types would be ignored on startup. Useful in case of external integrations like Nest or MyQ that may be managed directly by another Homebridge plugin.",
-            "type": "array",
-            "uniqueItems": true,
-            "items": {
-              "title": "Device Type",
-              "type": "string",
-              "enum": [
+          "title": "Ignore Devices",
+          "description": "Selected device types / equipment codes / IDs would be ignored on startup. Useful in case of external integrations like Nest or MyQ that may be managed directly by another Homebridge plugin.",
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "title": "Device Type / Equipment Code / ID",
+            "type": "string",
+            "typeahead": {
+              "source": [
                 "thermostat_device",
                 "door_lock_device",
                 "garage_door_device",
@@ -37,6 +38,7 @@
                 "multilevel_switch_device"
               ]
             }
+          }
         },
         "logDeviceList": {
           "title": "Show device list",
