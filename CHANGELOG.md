@@ -1,3 +1,14 @@
+## 1.8.0 (2023-05-17)
+### Changes
+- Added support for new wireless sensor devices (#83) (#96).
+- Doorbells now create a linked "contact sensor" accessory to indicate the doorbell button press (#78).
+    - The contact sensor briefly becomes "open" on the button press event.
+- Added the ability to ignore individual devices based on their ID or equipment code (#110).
+    - To use this feature, add the [] key to the config to show all configured Vivint device data in the log. Then, add the IDs or Equipment Codes of devices to hide to the ignore list.
+- Added back the ability to generate ffmpeg configs for all cameras in the log using the showCameraConfig flag (#77)
+### Bug fixes
+- Fixed double notification from doorbell button press
+
 ## 1.7.0 (2022-06-29)
 ### Changes
 - Add support for fan rotation speed (thanks to @mikedecaro)

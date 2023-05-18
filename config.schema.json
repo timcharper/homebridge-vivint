@@ -38,6 +38,11 @@
               ]
             }
         },
+        "logDeviceList": {
+          "title": "Show device list",
+          "description": "Shows data for all configured Vivint devices in the log",
+          "type": "boolean"
+        },
         "disableCameras": {
           "title": "Disable cameras",
           "description": "If checked, camera video feeds would not appear in Homebridge.",
@@ -46,6 +51,11 @@
         "useExternalVideoStreams": {
           "title": "Use external video streams",
           "description": "Stream camera feeds from Vivint servers instead of streaming directly from the Panel.",
+          "type": "boolean"
+        },
+        "showCameraConfig": {
+          "title": "Show camera config",
+          "description": "Shows configuration for all detected cameras in the log",
           "type": "boolean"
         }
       }

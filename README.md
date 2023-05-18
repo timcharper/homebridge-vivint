@@ -103,9 +103,11 @@ Configuration options overview:
 * **refreshToken** - Your Vivint refresh token.  This will be generated after entering your Vivint user name and password in the Config UI X plugin.
 * **apiLoginRefreshSecs** - How often should Vivint Homebridge renew the session token? The token that Vivint provides when authenticating will expire. Also, when this renewal occurs, the plugin requests another snapshot. The event stream can sometimes fail to report device state appropriately and events can come out of order with the snapshot, or updates can be missed entirely. The occasional snapshot retrieval will auto-correct any such errors. Avoid setting this any more frequent that 10 minutes.
 * **motionDetectedOccupancySensorMins** - Homebridge-Vivint will create occupancy sensors for motion sensors that will stay active for X minutes after a motion event is detected. This value configures for how long that occupancy sensor will stay active if no further motion events are detected. Note: Vivint's reporting of motion events over the event stream can be a little inconsistent, at times. As a recommendation, don't plan on creating Homekit automations that respond to Vivint motion events.
-* **ignoreDeviceTypes** - The array containing the device types that should be ignored. Allowed types: "thermostat_device", "door_lock_device", "garage_door_device", "camera_device", "wireless_sensor", "phillips_hue_bridge_device", "multilevel_switch_device"
+* **ignoreDeviceTypes** - The array containing the device types that should be ignored. Allowed types: "thermostat_device", "door_lock_device", "garage_door_device", "camera_device", "wireless_sensor". "phillips_hue_bridge_device", "multilevel_switch_device". Could also be used to ignore individual devices by ID or Equipment Code.
+* **logDeviceList** - If checked, shows data for all configured Vivint devices in the log.
 * **disableCameras** - If checked, camera video feeds would not appear in Homebridge.
 * **useExternalVideoStreams** - Stream camera feeds from Vivint servers instead of streaming directly from the Panel.
+* **showCameraConfig** - Log [homebridge-camera-ffmpeg](https://github.com/Sunoo/homebridge-camera-ffmpeg) configuration for all detected cameras.
 
 ## Credits
 
