@@ -1,3 +1,8 @@
+## 1.8.1 (2023-05-18)
+### Changes
+- Add hue bridge & multi level switch devices to the ignore device type list (@LuisRodriguezLD)
+- Add capability to manually enter device type / equipment code / ID to the ignore list using Settings UI.
+
 ## 1.8.0 (2023-05-17)
 ### Changes
 - Added support for new wireless sensor devices (#83) (#96).
