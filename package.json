@@ -1,6 +1,6 @@
 {
   "name": "@balansse/homebridge-vivint",
-  "version": "1.8.2",
+  "version": "1.8.3",
   "description": "Control Vivint with HomeBridge",
   "license": "ISC",
   "author": "Alexandr Balan <balansse@gmail.com>",
