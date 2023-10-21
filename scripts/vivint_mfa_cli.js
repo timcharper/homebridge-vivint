@@ -28,7 +28,7 @@ const run = async () => {
       resolveWithFullResponse: true
     });
     //console.log("Response = " + JSON.stringify(response, null, 4));
-    refreshToken = response.headers["set-cookie"][0].filter((cookie) => cookie.startsWith("s="))[0];
+    refreshToken = response.headers["set-cookie"].filter((cookie) => cookie.startsWith("s="))[0];
     if (!refreshToken) {
         throw new Error("Failed to retrieve session cookie!");
     }
