@@ -28,7 +28,11 @@ const run = async () => {
       resolveWithFullResponse: true
     });
     //console.log("Response = " + JSON.stringify(response, null, 4));
-    refreshToken = response.headers["set-cookie"][0].split(";")[0];
+    refreshToken = response.headers["set-cookie"].filter((cookie) => cookie.startsWith("s="))[0];
+    if (!refreshToken) {
+        throw new Error("Failed to retrieve session cookie!");
+    }
+    refreshToken = refreshToken.split(";")[0];
   } catch (error) {
     console.error(error);
   }
@@ -44,7 +48,10 @@ const run = async () => {
       simple: false //This allows us to receive a response even if it failed with 401 etc
     });
     //console.log("Response = " + JSON.stringify(response, null, 4));
-    refreshToken = response.headers["set-cookie"][0].split(";")[0];
+    let newRefreshToken = response.headers["set-cookie"].filter((cookie) => cookie.startsWith("s="))[0];
+    if (newRefreshToken) {
+      refreshToken = newRefreshToken.split(";")[0];
+    }
     if (response.statusCode === 401) {
       isMfa = true;
     } else {
